@@ -34,7 +34,7 @@ eleventyNavigation:
 {% if featuredPost %}
 <section class="featured-post">
   <div class="featured-post-content">
-    <span class="featured-tag">Ключевая Статья</span>
+    <span class="featured-tag">Свежая Статья</span>
     <h2><a href="{{ featuredPost.url | url }}">{{ featuredPost.data.title }}</a></h2>
     {% if featuredPost.data.description %}
       <p>{{ featuredPost.data.description }}</p>
@@ -45,7 +45,7 @@ eleventyNavigation:
 
 
 {# --- БЛОК 3: ОСТАЛЬНЫЕ СТАТЬИ --- #}
-<h2 class="section-title">Глубокое Погружение</h2>
+<h2 class="section-title">Остальные Статьи</h2>
 
 <ol reversed class="postlist" style="list-style: none; padding: 0;">
 {# Перебираем ВЕСЬ список постов... #}
