@@ -687,7 +687,8 @@ main picture img {
         gap: 15px;
     }
     .nav-link {
-        font-size: 1rem;
+        font-size: 0.9rem;
         padding: 8px 10px;
     }
+    .featured-post-content h2 { font-size: 1.5rem; }
 }

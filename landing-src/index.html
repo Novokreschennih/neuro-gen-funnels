@@ -197,12 +197,45 @@
             .audience-content.active { display: flex; }
         }
         @media (max-width: 768px) {
-            .header h1 { font-size: 2.8rem; } 
-            .header .subtitle { font-size: 1.2rem; }
-            .section-title { font-size: 2.2rem; } 
-            .main-box { padding: 30px 20px; } 
+            .main-box { padding: 30px 20px; }
+            .header h1 { font-size: 2.8rem; }
+            .section-title { font-size: 2.2rem; }
+            .results-grid { grid-template-columns: 1fr; }
+            .main-nav { gap: 15px; }
+            .nav-link { font-size: 1rem; padding: 8px 10px; }
+
+            /* --- ФИНАЛЬНЫЙ ФИКС ДЛЯ СИМУЛЯТОРА НА МОБИЛЬНЫХ --- */
             .simulator { padding: 30px 20px; }
-            .grid-2 { grid-template-columns: 1fr; }
+            .simulator-header h2 { font-size: 2.2rem; }
+            
+            .general-controls {
+                grid-template-columns: 1fr; /* Ставим элементы управления друг под друга */
+            }
+            .control-group label {
+                display: flex; /* Используем flex для контроля */
+                flex-direction: column; /* Ставим элементы в колонку */
+                align-items: flex-start;
+            }
+            .value-display {
+                float: none; /* Убираем float */
+                display: block; /* Делаем блочным элементом */
+                text-align: left; /* Выравниваем по левому краю */
+                margin-top: 8px; /* Добавляем отступ сверху */
+                font-size: 1.2rem; /* Делаем цифру чуть крупнее */
+            }
+
+            .income-item {
+                font-size: 1.5rem !important; /* Уменьшаем шрифт для дохода */
+                word-wrap: break-word; /* Добавляем перенос на всякий случай */
+            }
+            .result-item .value {
+                font-size: 1.2rem; /* Уменьшаем шрифт для кол-ва партнеров */
+                word-wrap: break-word;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            /* --- КОНЕЦ ФИКСА --- */
         }
         /* --- СТИЛИ ДЛЯ НОВОГО БЛОКА ПАРТНЕРОВ --- */
         .partner-block {
