@@ -1,90 +1,35 @@
-// Запускаем весь код только после того, как HTML-страница полностью загрузится
-document.addEventListener('DOMContentLoaded', function() {
-
-    // --- ЭФФЕКТ 1: ИНТЕРАКТИВНЫЙ "АВРОРА"-ФОН ---
-    // Эта функция будет вызываться при каждом движении мыши
-    document.body.addEventListener('mousemove', e => {
-        const { clientX, clientY } = e;
-        const x = Math.round((clientX / window.innerWidth) * 100);
-        const y = Math.round((clientY / window.innerHeight) * 100);
-        // Мы обновляем CSS-переменные, которые используются в стилях фона
-        document.documentElement.style.setProperty('--glow-x', `${x}%`);
-        document.documentElement.style.setProperty('--glow-y', `${y}%`);
-    });
-
-
-    // --- ЭФФЕКТ 2: ПЛАВНОЕ ПОЯВЛЕНИЕ ЭЛЕМЕНТОВ ПРИ СКРОЛЛЕ ---
-    // Находим все элементы, которые мы хотим анимировать
-    // Это и карточки постов, и шапка, и другие блоки
-    const animatedElements = document.querySelectorAll('.postlist-item, .featured-post, .latest-news, .post-content, .links-nextprev');
-    
-    // Создаем "наблюдателя", который следит за появлением элементов на экране
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            // Если элемент появился в зоне видимости
-            if (entry.isIntersecting) {
-                // Добавляем задержку на основе индекса для эффекта "волны"
-                const delay = entry.target.classList.contains('postlist-item') ? index * 100 : 0;
-                
-                setTimeout(() => {
-                    // Добавляем класс, который запускает CSS-анимацию
-                    entry.target.classList.add('is-visible');
-                }, delay);
-
-                // Перестаем следить за этим элементом, чтобы анимация не повторялась
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1 // Анимация начнется, когда элемент виден хотя бы на 10%
-    });
-    
-    // Запускаем наблюдение за каждым найденным элементом
-    animatedElements.forEach(el => {
-        observer.observe(el);
-    });
-});
-// --- ЛОГИКА ДЛЯ LIGHTBOX (УВЕЛИЧЕНИЕ КАРТИНОК) ---
+// --- ФУНКЦИЯ ДЛЯ LIGHTBOX ---
 function initLightbox() {
-    // 1. Создаем и вставляем элементы лайтбокса в DOM
+    const triggers = document.querySelectorAll('a.lightbox-trigger');
+    if (triggers.length === 0) return;
+
     const lightboxHTML = `
-        <div id="lightbox" style="display: none;">
+        <div id="lightbox">
             <span id="lightbox-close">&times;</span>
             <img id="lightbox-image" src="">
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', lightboxHTML);
 
-    // 2. Находим созданные элементы
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
     const closeButton = document.getElementById('lightbox-close');
 
-    // 3. Функция закрытия
     const closeLightbox = () => {
         lightbox.classList.remove('active');
+        setTimeout(() => { lightboxImage.setAttribute('src', ''); }, 300);
     };
 
-    // 4. ГЛАВНЫЙ ФИКС: Используем делегирование событий
-    // Мы вешаем один обработчик на весь `document`, который будет "ловить"
-    // клики по элементам с классом `lightbox-trigger`.
-    // Это работает, даже если элементы появляются на странице динамически.
     document.addEventListener('click', function (e) {
-        // Проверяем, был ли клик по нашему триггеру
         const trigger = e.target.closest('a.lightbox-trigger');
         if (trigger) {
-            e.preventDefault(); // ОТМЕНЯЕМ ПЕРЕХОД ПО ССЫЛКЕ
+            e.preventDefault();
             const imgSrc = trigger.getAttribute('href');
             lightboxImage.setAttribute('src', imgSrc);
-            lightbox.style.display = 'flex'; // Используем style для надежности
-            // Небольшая задержка перед добавлением класса для анимации
-            setTimeout(() => {
-                lightbox.classList.add('active');
-            }, 10);
+            lightbox.classList.add('active');
         }
     });
 
-    // 5. Обработчики закрытия
     lightbox.addEventListener('click', (e) => {
         if (e.target.id === 'lightbox') {
             closeLightbox();
@@ -93,9 +38,49 @@ function initLightbox() {
     closeButton.addEventListener('click', closeLightbox);
 }
 
-// Запускаем всю нашу логику после загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-    // ... ваш существующий код для Aurora ...
+// --- ФУНКЦИЯ ДЛЯ АНИМАЦИЙ ПРИ СКРОЛЛЕ ---
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('.postlist-item, .featured-post, .latest-news, .post-content, .links-nextprev, .blog-header, .footer');
+    
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.classList.contains('postlist-item') ? index * 100 : 0;
+                    
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, delay);
 
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.01 // <-- ГЛАВНЫЙ ФИКС ДЛЯ СТАТЕЙ
+        });
+        
+        animatedElements.forEach(el => {
+            observer.observe(el);
+        });
+    } else {
+        animatedElements.forEach(el => {
+            el.classList.add('is-visible');
+        });
+    }
+}
+
+// --- ГЛАВНЫЙ ОБРАБОТЧИК: ЗАПУСКАЕМ ВСЁ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ ---
+document.addEventListener('DOMContentLoaded', function() {
+    // --- ЭФФЕКТ "АВРОРА"-ФОН ---
+    document.body.addEventListener('mousemove', e => {
+        const { clientX, clientY } = e;
+        const x = Math.round((clientX / window.innerWidth) * 100);
+        const y = Math.round((clientY / window.innerHeight) * 100);
+        document.documentElement.style.setProperty('--glow-x', `${x}%`);
+        document.documentElement.style.setProperty('--glow-y', `${y}%`);
+    });
+
+    // Запускаем наши функции
     initLightbox();
+    initScrollAnimations();
 });
