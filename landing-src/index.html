@@ -613,11 +613,67 @@
         opacity: 1;
         transform: translateY(0);
     }
-    
-    /* =========================================
+  /* =========================================
+   ✅ [NEW] СТИЛИ ДЛЯ НОВОГО ПОДЗАГОЛОВКА В ХЕДЕРЕ
+========================================= */
+.header-paths {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 40px auto 50px; /* Отступы сверху и снизу */
+    max-width: 900px; /* Ограничиваем ширину для больших экранов */
+    flex-wrap: wrap; /* Позволяем переноситься на мобильных */
+}
+
+.path-item {
+    flex: 1; /* Растягиваемся на доступное место */
+    min-width: 300px; /* Минимальная ширина до переноса */
+    text-align: left;
+    background: rgba(255, 255, 255, 0.03); /* Очень легкий фон */
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px 25px;
+    transition: all 0.3s ease;
+}
+
+.path-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.path-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.path-icon {
+    font-size: 1.5rem;
+}
+
+.path-title h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.path-item p {
+    font-size: 1rem;
+    color: var(--text-gray);
+    line-height: 1.6;
+}  
+  
+	
+	/* =========================================
        RESPONSIVE REFINEMENTS
     ========================================= */
-    @media (max-width: 992px) { 
+    
+	
+	@media (max-width: 992px) { 
         .header { padding-top: 120px; }
         .results-grid { grid-template-columns: 1fr; max-width: 600px; margin: 0 auto; } 
         .sethubble { order: -1; border-width: 2px; }
@@ -699,17 +755,36 @@
 <div class="container">
     
     <header class="header">
-        <canvas id="hero-canvas"></canvas>
-        <h1 class="animate-on-scroll">SetHubble: Ваша Партнерская Империя. <br><span class="text-gradient">С Продуктом или Без.</span></h1>
-        <p class="subtitle animate-on-scroll" data-delay="100">
-            <b>Для авторов:</b> создайте армию партнеров, которая продает за вас. 
-            <br><b>Для партнеров:</b> зарабатывайте пассивно, строя свою сеть на готовых продуктах.
-        </p>
-        
-        <div class="animate-on-scroll" data-delay="200" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <a href="#simulator" class="cta-button">Рассчитать Свой Доход →</a>
+    <canvas id="hero-canvas"></canvas>
+
+    <!-- ✅ [UPGRADE] Новый, более энергичный заголовок -->
+    <h1 class="animate-on-scroll">
+        Новая эра заработка на партнёрках.
+        <br><span class="text-gradient">С продуктом или без.</span>
+    </h1>
+
+    <!-- ✅ [UPGRADE] Подзаголовок превратился в стильный UI-элемент -->
+    <div class="header-paths animate-on-scroll" data-delay="100">
+        <div class="path-item">
+            <div class="path-title">
+                <span class="path-icon">🚀</span>
+                <h4>ДЛЯ АВТОРОВ</h4>
+            </div>
+            <p>Создайте армию партнеров, которая продает за вас и масштабирует ваш бизнес.</p>
         </div>
-    </header>
+        <div class="path-item">
+            <div class="path-title">
+                <span class="path-icon">💸</span>
+                <h4>ДЛЯ ПАРТНЁРОВ</h4>
+            </div>
+            <p>Зарабатывайте пассивно, строя свою сеть на уже готовых, качественных продуктах.</p>
+        </div>
+    </div>
+    
+    <div class="animate-on-scroll" data-delay="200" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+        <a href="#simulator" class="cta-button">Рассчитать Свой Доход →</a>
+    </div>
+</header>
     
     <section class="section">
         <h2 class="section-title animate-on-scroll">Старые Правила <span style="color: var(--accent);">Не Работают</span></h2>
