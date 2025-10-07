@@ -3,7 +3,8 @@
  * Version: 2.0 (Dual-Mode Simulator)
  * Author: Senior Frontend Developer & UI/UX Designer
  */
-
+// ✅ [FIX] Добавляем класс к body, чтобы активировать "скрывающую" логику CSS
+document.body.classList.add('js-loading');
 // Утилита для оптимизации производительности (Throttle)
 // Ограничивает частоту вызова функции. Полезно для событий вроде 'scroll' и 'mousemove'.
 function throttle(func, limit) {
