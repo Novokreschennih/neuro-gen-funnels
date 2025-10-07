@@ -41,24 +41,49 @@ document.addEventListener('DOMContentLoaded', function() {
         threshold: 0.15 // Элемент должен появиться на 15%
     };
 
-    const scrollObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                const delay = parseInt(el.dataset.delay) || 0;
-                
-                setTimeout(() => {
-                    el.classList.add('is-visible');
-                    // Если симулятор стал видимым, запускаем первую отрисовку
-                    if (el.id === 'simulator' && typeof window.renderSimulator === 'function') {
-                         window.renderSimulator();
+    // ✅ [UPGRADE] "Ленивая" загрузка Chart.js при появлении симулятора
+let chartJsLoaded = false; // Флаг, чтобы не загружать скрипт повторно
+
+const scrollObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const el = entry.target;
+            const delay = parseInt(el.dataset.delay) || 0;
+            
+            setTimeout(() => {
+                el.classList.add('is-visible');
+
+                // Если в поле зрения попал симулятор...
+                if (el.id === 'simulator') {
+                    // ...и Chart.js еще не загружен...
+                    if (!chartJsLoaded) {
+                        chartJsLoaded = true; // Ставим флаг
+                        
+                        // Создаем тег <script> динамически
+                        const chartScript = document.createElement('script');
+                        chartScript.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                        
+                        // САМОЕ ВАЖНОЕ: запускаем рендер калькулятора ТОЛЬКО ПОСЛЕ загрузки скрипта
+                        chartScript.onload = function() {
+                            if (typeof window.renderSimulator === 'function') {
+                                window.renderSimulator();
+                            }
+                        };
+                        
+                        // Добавляем скрипт на страницу, чтобы началась загрузка
+                        document.body.appendChild(chartScript);
+
+                    } else if (typeof window.renderSimulator === 'function') {
+                        // Если скрипт уже загружен, просто рендерим
+                        window.renderSimulator();
                     }
-                }, delay);
-                
-                observer.unobserve(el); // Перестаем следить за элементом после анимации
-            }
-        });
-    }, observerOptions);
+                }
+            }, delay);
+            
+            observer.unobserve(el);
+        }
+    });
+}, observerOptions);
 
     document.querySelectorAll('.animate-on-scroll').forEach(el => scrollObserver.observe(el));
 
