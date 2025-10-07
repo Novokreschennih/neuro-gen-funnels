@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Функция для смены режима симулятора
-    function setSimulatorMode(newMode) {
+   window.setSimulatorMode = function(newMode) {
         if (newMode === currentMode) return;
         currentMode = newMode;
         
@@ -488,4 +488,40 @@ document.addEventListener('DOMContentLoaded', function() {
     els.sethubble.l2plus.value = config.sethubble.commissions.l2plus;
     
     updateSimulatorUI();
+});
+
+// ✅ [NEW] Логика для умного скролла из хедера к симулятору
+
+document.addEventListener('DOMContentLoaded', function() {
+    const pathLinks = document.querySelectorAll('.path-link');
+    const simulatorSection = document.getElementById('simulator');
+
+    // Если на странице нет таких ссылок или симулятора, ничего не делаем
+    if (!pathLinks.length || !simulatorSection) {
+        return;
+    }
+
+    pathLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            // 1. Отменяем стандартный "прыжок" по якорю
+            event.preventDefault();
+
+            // 2. Получаем нужный режим ('author' или 'partner') из data-атрибута
+            const targetMode = this.dataset.mode;
+
+            // 3. Вызываем функцию переключения режима в симуляторе
+            // (Убедимся, что функция setSimulatorMode доступна глобально или в этой области видимости)
+            if (window.setSimulatorMode) {
+                window.setSimulatorMode(targetMode);
+            } else {
+                console.warn('Функция setSimulatorMode не найдена. Убедитесь, что simulator.js загружен и функция доступна.');
+            }
+
+            // 4. Плавно скроллим к секции симулятора
+            simulatorSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start' // Выравниваем по верхнему краю
+            });
+        });
+    });
 });
