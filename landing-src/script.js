@@ -63,6 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- 2. Hero Canvas Particles (Фоновая анимация в шапке) ---
+    // ✅ [FIX] Запускаем дорогую анимацию только на устройствах с экраном шире 768px
+if (window.matchMedia('(min-width: 768px)').matches) {
+
+    // --- 2. Hero Canvas Particles (Фоновая анимация в шапке) ---
     const canvas = document.getElementById('hero-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -161,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initParticles();
         animateParticles();
     }
+}
 
 
     // --- 3. Audience Section Tabs (Переключение табов "Для кого") ---
