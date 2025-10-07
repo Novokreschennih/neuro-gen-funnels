@@ -648,6 +648,18 @@
         .mode-switch-btn.active { background: var(--primary); }
     }
 </style>
+<noscript>
+        <style>
+            /* 
+              Эти стили применятся ТОЛЬКО если JS отключен.
+              Они отменяют "скрывающую" анимацию и делают контент видимым сразу.
+            */
+            .animate-on-scroll {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        </style>
+    </noscript>	
 <!-- Schema.org для SEO -->
 <script type="application/ld+json">
     {
