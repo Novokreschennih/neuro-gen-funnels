@@ -666,7 +666,47 @@
     color: var(--text-gray);
     line-height: 1.6;
 }  
-  
+  /* ==========================================================
+   ✅ [UPGRADE] ФИНАЛЬНЫЕ ПРАВКИ ДЛЯ СТИЛЕЙ ХЕДЕРА
+========================================================== */
+
+/* 1. Делаем контейнер хедера чуть шире */
+.header { 
+    /* ... прочие стили хедера ... */
+    max-width: 960px; /* Было 900px */
+}
+
+/* 2. Полностью переписываем стили для нового подзаголовка */
+.header .subtitle { 
+    font-size: clamp(1.2rem, 3vw, 1.8rem); /* Сделали подзаголовок крупнее и адаптивным */
+    color: var(--text-gray); 
+    max-width: 750px; 
+    margin: 25px auto 40px; /* Скорректировали отступы */
+    line-height: 1.5; 
+    font-weight: 400;
+    position: relative;
+    z-index: 2;
+    padding-top: 25px; /* Добавили отступ сверху для декоративной линии */
+    border-top: 1px solid var(--glass-border); /* Сама линия */
+}
+
+/* 3. Добавляем "свечение" для линии над подзаголовком */
+.header .subtitle::before {
+    content: '';
+    position: absolute;
+    top: -1px; /* Накладываем точно на border-top */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px; /* Ширина градиентного блика */
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+}
+
+/* 4. Добавляем стиль для выделения слов "Авторов" и "Партнеров" */
+.highlight-alt {
+    color: var(--text-light); /* Делаем слова белыми, а не серыми */
+    font-weight: 500;
+}
 	
 	/* =========================================
        RESPONSIVE REFINEMENTS
