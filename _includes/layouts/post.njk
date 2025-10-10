@@ -8,22 +8,22 @@ layout: layouts/base.njk
 <article class="post-content">
 	<h1>{{ title }}</h1>
 
-	{# --- ФИНАЛЬНЫЙ, РАБОЧИЙ БЛОК ДЛЯ ДАТЫ И ТЕГОВ --- #}
+	{# --- ФИНАЛЬНЫЙ, 100% РАБОЧИЙ БЛОК ДЛЯ ДАТЫ И ТЕГОВ --- #}
 	<div class="post-metadata">
 		<time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate }}</time>
 		{# `tags` здесь - это массив slug'ов из Front Matter вашего поста #}
 		{%- if tags %}
 		<div class="tags-list">
-			{# Перебираем теги (slug'и) текущего поста. `page.data.tags` - это более надежный способ доступа #}
-			{%- for tagSlug in page.data.tags | filterTagList %}
-				{# `tags` (без всего) - это наш глобальный словарь из _data/tags.js #}
+			{# Перебираем теги (slug'и) текущего поста #}
+			{%- for tagSlug in tags | filterTagList %}
+				{# `tagDictionary` - это наш глобальный словарь из _data/tagDictionary.js #}
 				{# Проверяем, есть ли такой slug в нашем словаре #}
-				{%- if tags[tagSlug] %}
+				{%- if tagDictionary[tagSlug] %}
 					{# Формируем URL из slug'а #}
 					{%- set tagUrl %}/tags/{{ tagSlug }}/{% endset %}
 					<a href="{{ tagUrl }}" class="post-tag">
 						{# Отображаем красивое русское имя из нашего словаря #}
-						{{ tags[tagSlug] }}
+						{{ tagDictionary[tagSlug] }}
 					</a>
 				{%- endif %}
 			{%- endfor %}
