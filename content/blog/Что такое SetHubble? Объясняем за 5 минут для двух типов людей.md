@@ -3,10 +3,8 @@ title: "Что такое SetHubble? Объясняем за 5 минут для
 description: "Узнайте, что такое SetHubble! Мощный инструмент для владельцев продуктов и тех, кто ищет заработок на партнерках. Создайте свою бизнес-сеть с нуля."
 date: 2025-09-30 # Укажите актуальную дату публикации
 tags:
-  - SetHubble_Гайды
-  - Гайд
-  - SetHubble
-  - Партнерский маркетинг
+  - sethubble-guide
+  - affiliate-marketing
 permalink: /blog/chto-takoe-sethubble/ # ЧПУ-ссылка для поста. Eleventy создаст /blog/chto-takoe-sethubble/index.html
 ---
 
