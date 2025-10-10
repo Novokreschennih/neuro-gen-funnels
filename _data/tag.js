@@ -1,7 +1,7 @@
 // _data/tags.js
 
-// Это наш "источник правды" о тегах.
-// В будущем его можно будет генерировать автоматически из Google Sheets.
+// Используем современный синтаксис `export default`
+
 const tagsData = [
   { slug: "sethubble-guide", name: "SetHubble Гайды" },
   { slug: "sethubble-strategy", name: "SetHubble Стратегии" },
@@ -40,5 +40,5 @@ for (const tag of tagsData) {
 }
 
 // Eleventy автоматически сделает этот объект доступным во всех шаблонах
-// под именем `tags`.
-module.exports = tagMap;
+// под именем `tags` (по имени файла).
+export default tagMap;
