@@ -2,11 +2,10 @@
 title: "Анонс: SetHubble готовит революцию для наземного бизнеса — первые скриншоты!"
 description: "Узнайте о грядущем обновлении SetHubble, которое позволит любому наземному бизнесу оцифровать сарафанное радио и получать сверхприбыли. Первые подробности и скриншоты."
 date: 2025-10-11
+layout: layouts/news.njk
 tags:
   - news
-  - for-partners
-  - sethubble-ecosystem
-  - announcement
+  
 # permalink не нужен, URL будет /news/offline-business-revolution/
 ---
 
