@@ -203,7 +203,7 @@
 }
 
 @media (max-width: 768px) {
-    .simulator { padding: 40px 20px; border-radius: 20px; }
+    /* .simulator { padding: 40px 20px; border-radius: 20px; } */
     .general-controls { grid-template-columns: 1fr; gap: 25px; }
     .control-group label { flex-direction: column; align-items: flex-start; gap: 8px; }
     .slider { height: 8px; }
