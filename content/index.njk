@@ -1,13 +1,13 @@
 ---
-title: "Блог о SetHubble: Новости и Статьи"
+title: "Блог SetHubble: Новости и Статьи"
 layout: layouts/base.njk
 permalink: /blog/index.html
 eleventyNavigation:
-  key: Главная
+  key: Блог
   order: 1
 ---
 
-{# --- БЛОК 1: ПОСЛЕДНИЕ НОВОСТИ (ТЕПЕРЬ НАВЕРХУ) --- #}
+{# --- БЛОК 1: ПОСЛЕДНИЕ НОВОСТИ --- #}
 {% set newslist = collections.news | reverse %}
 {% if newslist.length %}
 <section class="latest-news">
@@ -16,7 +16,6 @@ eleventyNavigation:
     <a href="/news/" class="view-all-link">Все новости →</a>
   </div>
   <ol class="news-snapshot-list" style="list-style: none; padding: 0;">
-  {# ИСПОЛЬЗУЕМ РАБОЧИЙ ФИЛЬТР `head` ВМЕСТО `slice` #}
   {%- for item in newslist | head(3) -%}
     <li class="news-snapshot-item">
       <time datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>
@@ -26,7 +25,6 @@ eleventyNavigation:
   </ol>
 </section>
 {% endif %}
-
 
 {# --- БЛОК 2: ГЛАВНАЯ СТАТЬЯ --- #}
 {% set allPosts = collections.posts | reverse %}
@@ -43,13 +41,12 @@ eleventyNavigation:
 </section>
 {% endif %}
 
-
-{# --- БЛОК 3: ОСТАЛЬНЫЕ СТАТЬИ --- #}
-<h2 class="section-title">Остальные Статьи</h2>
+{# --- БЛОК 3: ПОСЛЕДНИЕ СТАТЬИ (С ПРАВИЛЬНЫМ ЦИКЛОМ) --- #}
+<h2 class="section-title">Ещё Статьи</h2>
 
 <ol reversed class="postlist" style="list-style: none; padding: 0;">
 {# Перебираем ВЕСЬ список постов... #}
-{%- for post in allPosts -%}
+{%- for post in allPosts | head(7) -%} {# Берем только 7 последних постов #}
   {# ...но выводим карточку, ТОЛЬКО ЕСЛИ это НЕ ПЕРВЫЙ элемент #}
   {%- if not loop.first -%}
     <li class="postlist-item">
@@ -65,3 +62,10 @@ eleventyNavigation:
   {%- endif -%}
 {%- endfor -%}
 </ol>
+
+{# --- НАВИГАЦИЯ (показываем только ссылку на полный архив) --- #}
+{% if collections.posts.length > 7 %}
+<div class="view-all-wrapper">
+  <a href="/archive/" class="cta-button">Посмотреть все статьи</a>
+</div>
+{% endif %}
