@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Intersection Observer для анимаций появления при скролле
     const observerOptions = {
         root: null,
-        rootMargin: '0px',
-        threshold: 0.15 // Элемент должен появиться на 15%
+        rootMargin: '0px', // Можно увеличить, напр. '100px', чтобы заранее грузить
+        threshold: 0 // <-- ГЛАВНЫЙ ФИКС: Срабатывает, как только появится хотя бы 1 пиксель
     };
 
     // ✅ [UPGRADE] "Ленивая" загрузка Chart.js при появлении симулятора

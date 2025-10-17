@@ -1305,7 +1305,7 @@
 			.path-cta-overlay {
 				position: absolute;
 				inset: 0;
-				background-color: rgba(99, 102, 241, 0.9);
+				background-color: RGB(0, 231, 240);
 				backdrop-filter: blur(5px);
 				-webkit-backdrop-filter: blur(5px);
 				display: flex;
@@ -1455,8 +1455,16 @@
 					grid-template-columns: 1fr;
 				}
 			}
-			@media (max-width: 768px) {
-				.section {
+			@media (max-width: 768px) 
+				{
+				
+				body.js-loading .animate-on-scroll {
+        /* На мобильных мы не скрываем элементы изначально,
+           чтобы избежать "пустоты", если JS не сработает.
+           Анимация будет только на "появление" (transform). */
+        opacity: 1; 
+    }
+					.section {
 					margin-bottom: 100px;
 				}
 				.simulator {
@@ -1831,7 +1839,7 @@
 						href="https://sethubble.ru/start"
 						target="_blank"
 						class="cta-button"
-						>Стать Партнёром (Бесплатно) →</a
+						>Перейти к регистрации на sethubble.com →</a
 					>
 				</div>
 
@@ -1930,6 +1938,7 @@
 						"
 					>
 						Выберите свою роль и узнайте, сколько вы можете заработать за год.
+						Будет показан идеальный вариант. Он не гарантирован.
 					</p>
 				</div>
 
@@ -2218,7 +2227,7 @@
 						href="https://sethubble.ru/start"
 						target="_blank"
 						class="cta-button"
-						>Создать Аккаунт (Free) →</a
+						>Создать Аккаунт на sethubble.com →</a
 					>
 				</div>
 			</section>

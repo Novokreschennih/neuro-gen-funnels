@@ -1,11 +1,11 @@
 export default {
 	title: "Блог о SetHubble",
-	url: "https://blog.sethubble.ru/", // Ваш домен
+	url: "https://sethubble.ru/", 
 	language: "ru",
 	description: "Новости, обновления и инсайты про SetHubble.",
 	author: {
 		name: "SetHubble",
-		email: "i@inovok.ru", // Ваш email
-		url: "https://sethubble.ru/" // Ссылка на ваш лендинг
+		email: "i@inovok.ru", 
+		url: "https://sethubble.ru/" 
 	}
 }
