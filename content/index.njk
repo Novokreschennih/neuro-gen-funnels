@@ -13,7 +13,7 @@ eleventyNavigation:
 <section class="latest-news">
   <div class="section-header">
     <h2 class="section-title-small">Последние Новости</h2>
-    <a href="/news/" class="view-all-link">Все новости →</a>
+    
   </div>
   <ol class="news-snapshot-list" style="list-style: none; padding: 0;">
   {%- for item in newslist | head(3) -%}
@@ -23,6 +23,9 @@ eleventyNavigation:
     </li>
   {%- endfor -%}
   </ol>
+  
+  <a href="/news/" class="view-all-link">Все новости →</a>
+  
 </section>
 {% endif %}
 
