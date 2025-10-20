@@ -1050,3 +1050,33 @@ main picture img {
 .secondary-link:hover {
 	color: var(--primary);
 }
+/* --- СТИЛИ ДЛЯ ТЕГОВ НА КАРТОЧКАХ ПОСТОВ --- */
+
+/* Используем Flexbox, чтобы "прижать" теги к низу карточки */
+.postlist-link {
+	display: flex;
+	flex-direction: column;
+}
+.post-card-content {
+	flex-grow: 1; /* Этот блок будет занимать все доступное пространство */
+}
+
+.post-card-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 20px; /* Отступ от текста до тегов */
+	padding-top: 15px;
+	border-top: 1px solid var(--border);
+}
+
+.post-tag-on-card {
+	background: rgba(0, 247, 255, 0.1);
+	color: var(--neon);
+	padding: 4px 10px;
+	border-radius: 20px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
