@@ -1672,8 +1672,7 @@
 			html.light-theme .philosophy-title,
 			html.light-theme .partner-text h2,
 			html.light-theme .final-cta h2,
-			html.light-theme .audience-content h3,
-			html.light-theme .simulator-header h2 {
+			html.light-theme .audience-content h3 {
 				color: var(--darker); /* Делаем все заголовки темными */
 				background: none; /* Убираем градиент, который мешает */
 				-webkit-background-clip: unset;
@@ -1740,6 +1739,70 @@
 			html.light-theme .secret-card h3,
 			html.light-theme .problem-card h3 {
 				color: var(--primary);
+			}
+			/* ==========================================================
+   ✅ ФИНАЛЬНЫЙ ФИКС v4: Полная Изоляция Симулятора
+========================================================== */
+
+			/* 1. Глобальное правило для всех заголовков, ИСКЛЮЧАЯ те, что внутри симулятора */
+			html.light-theme :where(h1, h2, h3):not(.simulator *) {
+				color: var(--darker);
+				background: none;
+				-webkit-background-clip: unset;
+				background-clip: unset;
+				-webkit-text-fill-color: unset;
+			}
+
+			/* Особый случай для градиентного H1 в шапке */
+			html.light-theme .header h1 {
+				background: linear-gradient(45deg, var(--darker), var(--primary));
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			/* 2. Делаем блок "Партнер" всегда темным (как и раньше) */
+			html.light-theme .partner-section-wrapper {
+				background: var(--darker);
+				background-image: none;
+			}
+			html.light-theme .partner-text h2 {
+				color: white;
+			}
+			html.light-theme .partner-text h2 .neon-text {
+				color: var(--neon);
+			}
+
+			/* 3. "ЗАМОРАЖИВАЕМ" стили симулятора, чтобы они НЕ менялись в светлой теме */
+			html.light-theme .simulator {
+				background: linear-gradient(
+					to bottom right,
+					rgba(15, 23, 42, 0.8),
+					rgba(2, 6, 23, 0.9)
+				) !important; /* Гарантируем темный фон */
+			}
+
+			/* Возвращаем светлые/неоновые цвета всем текстам внутри темного симулятора */
+			html.light-theme .simulator-header h2,
+			html.light-theme .result-column h3,
+			html.light-theme .value-display,
+			html.light-theme .result-item .value,
+			html.light-theme .income-value {
+				color: var(--text-light) !important; /* Гарантируем светлый текст */
+			}
+
+			html.light-theme .sethubble h3,
+			html.light-theme .sethubble .income-value {
+				color: var(--neon) !important; /* Гарантируем неоновый цвет */
+				text-shadow: 0 0 15px var(--neon-glow);
+			}
+
+			/* Инвертируем цвета кнопок и ссылок ОБРАТНО на темные */
+			html.light-theme .card h3 {
+				color: var(--darker);
+			}
+			html.light-theme .philosophy-text span {
+				color: var(--primary) !important;
 			}
 		</style>
 		<noscript>
