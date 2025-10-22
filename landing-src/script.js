@@ -1,7 +1,5 @@
-/**
- * SetHubble Landing Page Interactive Script
- * Version: 2.7 (Final Stable)
- */
+document.body.classList.add("js-loading");
+
 document.addEventListener("DOMContentLoaded", function () {
 	function throttle(func, limit) {
 		let inThrottle;
@@ -26,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				"theme",
 				htmlEl.classList.contains("light-theme") ? "light" : "dark"
 			);
-			// Re-render chart on theme change
 			if (typeof window.renderSimulator === "function") {
 				setTimeout(() => window.renderSimulator(), 50);
 			}
