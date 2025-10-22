@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru"> <!-- По умолчанию класс "js" отсутствует -->
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,10 @@
 			SetHubble: Конструктор партнёрских программ | Доход для Авторов и
 			Партнеров
 		</title>
+		
+		<!-- ✅ ИЗМЕНЕНИЕ: Сигнал для CSS, что JS включен. Выполняется мгновенно. -->
+		<script>document.documentElement.className = 'js';</script>
+
 		<script>
 			(function () {
 				const theme = localStorage.getItem("theme");
@@ -422,12 +426,15 @@
         padding: 35px; 
         border: 1px solid var(--glass-border); 
         position: relative; 
-        opacity: 0; 
-        transform: translateY(40px) scale(0.98); 
-        transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s; 
         overflow: hidden; 
     }
     
+    .js .card {
+        opacity: 0; 
+        transform: translateY(40px) scale(0.98); 
+        transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s; 
+    }
+
     .card.is-visible { 
         opacity: 1; 
         transform: translateY(0) scale(1); 
@@ -1425,21 +1432,25 @@
         display: none; 
     }
     
-    /* Animations */
-    .animate-on-scroll { 
-        transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1); 
-        will-change: opacity, transform; 
+    /* ✅ ИЗМЕНЕНИЕ: Логика анимации переработана для надежности */
+    /* По умолчанию все видимо */
+    .animate-on-scroll {
+        opacity: 1;
+        transform: translateY(0);
     }
-    
-    body.js-loading .animate-on-scroll { 
-        opacity: 0; 
-        transform: translateY(30px); 
+    /* Если JS работает, мы скрываем элементы для анимации */
+    .js .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+        will-change: opacity, transform;
     }
-    
-    .animate-on-scroll.is-visible { 
-        opacity: 1; 
-        transform: translateY(0); 
+    /* Когда элемент становится видимым, показываем его */
+    .js .animate-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
     }
+
     
     /* Accessibility */
     @media (prefers-reduced-motion: reduce) {
@@ -1557,11 +1568,12 @@
     }
     
     @media (max-width: 768px) {
-        body.js-loading .animate-on-scroll { 
-            opacity: 1; 
-            transform: translateY(0); 
+        /* ✅ ИЗМЕНЕНИЕ: Отключаем анимацию на мобильных для скорости */
+        .js .animate-on-scroll {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
+
         #hero-canvas { 
             display: none; 
         }
@@ -1701,9 +1713,9 @@
             gap: 15px;
         }
     }
-    /* ✅ СТИЛИ ДЛЯ "ОСТРОВОВ" С ПОСТОЯННОЙ ТЕМНОЙ ТЕМОЙ */
+    /* СТИЛИ ДЛЯ "ОСТРОВОВ" С ПОСТОЯННОЙ ТЕМНОЙ ТЕМОЙ */
     html.light-theme .island-dark {
-        color: var(--text-light); /* ✅ ИЗМЕНЕНИЕ: Принудительно задаем светлый цвет текста для всего блока */
+        color: var(--text-light); /* ✅ ИЗМЕНЕНИЕ: Задаем светлый цвет текста для всего блока */
         --primary: #6366f1;
         --primary-glow: rgba(99, 102, 241, 0.5);
         --secondary: #8b5cf6;
@@ -1715,12 +1727,12 @@
         --glass-border: rgba(255, 255, 255, 0.08);
         --bg-surface: #0f172a;
     }
-    html.light-theme .island-dark .partner-text h2,
-    html.light-theme .island-dark .feature-desc h4,
+    html.light-theme .island-dark h2,
+    html.light-theme .island-dark h3,
+    html.light-theme .island-dark h4,
     html.light-theme .island-dark .number-input,
     html.light-theme .island-dark .conclusion-box p,
-    html.light-theme .island-dark .result-item .value,
-    html.light-theme .island-dark .simulator-header h2 {
+    html.light-theme .island-dark .result-item .value {
         color: white;
     }
     html.light-theme .island-dark .mode-switch-btn {
@@ -1735,17 +1747,13 @@
     html.light-theme .island-dark .slider::-moz-range-thumb {
         background: white;
     }
-	/*
-  ИСПРАВЛЕНИЕ ДЛЯ КНОПКИ "СОЗДАТЬ АККАУНТ" В СВЕТЛОЙ ТЕМЕ
-*/
-html.light-theme .island-dark .final-cta .cta-button {
-    color: #020617; /* Принудительно задаем темный цвет текста */
-}
-
-/* Также добавим стиль для наведения, чтобы цвет оставался контрастным */
-html.light-theme .island-dark .final-cta .cta-button:hover {
-    color: #6366f1; /* Принудительно задаем "темный" фиолетовый цвет */
-}
+    /* ✅ ИЗМЕНЕНИЕ: Исправление для кнопки CTA в светлой теме */
+    html.light-theme .island-dark .final-cta .cta-button {
+        color: #020617; /* Темный цвет текста для белой кнопки */
+    }
+    html.light-theme .island-dark .final-cta .cta-button:hover {
+        color: #6366f1; /* Фиолетовый цвет текста при наведении */
+    }
 </style>
 		<noscript>
 			<style>
@@ -2356,7 +2364,7 @@ html.light-theme .island-dark .final-cta .cta-button:hover {
 			</section>
 
 			<section
-				class="final-cta-wrapper animate-on-scroll island-dark" 
+				class="final-cta-wrapper animate-on-scroll island-dark"
 				style="margin-top: 120px"
 			>
 				<div class="final-cta">
@@ -2576,10 +2584,9 @@ html.light-theme .island-dark .final-cta .cta-button:hover {
 		<script>
 /**
  * SetHubble Landing Page Interactive Script
- * Version: 2.1 (Fix content visibility)
+ * Version: 2.2 (Bulletproof Loading & Theming Fixes)
  * Author: Senior Frontend Developer & UI/UX Designer
  */
-document.body.classList.add("js-loading");
 
 function throttle(func, limit) {
 	let inThrottle;
@@ -2595,6 +2602,12 @@ function throttle(func, limit) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Проверяем, поддерживает ли браузер IntersectionObserver. Если нет, ничего не делаем,
+    // так как все элементы уже видимы по умолчанию.
+    if (!('IntersectionObserver' in window)) {
+        return;
+    }
+
 	const themeToggle = document.getElementById("theme-toggle");
 	const htmlEl = document.documentElement;
 
@@ -2628,7 +2641,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const observerOptions = {
 		root: null,
 		rootMargin: "0px",
-		threshold: 0.1, // Start animation when 10% of the element is visible
+		threshold: 0.1,
 	};
 
 	let chartJsLoaded = false;
@@ -2818,7 +2831,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		sethubblePartnersLabel: document.getElementById("sethubblePartnersLabel"),
 	};
 
-	if (!els.price || !els.chartCtx) return;
+	if (!els.price) return;
+    if (els.chartCtx === null) { console.warn("Canvas for chart not found."); }
 
 	let salesChartInstance = null;
 	let currentMode = "author";
@@ -3071,8 +3085,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	els.sethubble.l1.value = config.sethubble.commissions.l1;
 	els.sethubble.l2plus.value = config.sethubble.commissions.l2plus;
 	updateSimulatorUI();
-    
-    document.body.classList.remove("js-loading");
 });
 
 document.addEventListener("DOMContentLoaded", function () {
