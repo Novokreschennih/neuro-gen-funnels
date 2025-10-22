@@ -1735,6 +1735,17 @@
     html.light-theme .island-dark .slider::-moz-range-thumb {
         background: white;
     }
+	/*
+  ИСПРАВЛЕНИЕ ДЛЯ КНОПКИ "СОЗДАТЬ АККАУНТ" В СВЕТЛОЙ ТЕМЕ
+*/
+html.light-theme .island-dark .final-cta .cta-button {
+    color: #020617; /* Принудительно задаем темный цвет текста */
+}
+
+/* Также добавим стиль для наведения, чтобы цвет оставался контрастным */
+html.light-theme .island-dark .final-cta .cta-button:hover {
+    color: #6366f1; /* Принудительно задаем "темный" фиолетовый цвет */
+}
 </style>
 		<noscript>
 			<style>
