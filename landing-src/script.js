@@ -1,82 +1,103 @@
+/**
+ * SetHubble Landing Page Interactive Script
+ * Version: 2.0 (Dual-Mode Simulator)
+ * Author: Senior Frontend Developer & UI/UX Designer
+ */
 document.body.classList.add("js-loading");
 
-document.addEventListener("DOMContentLoaded", function () {
-	function throttle(func, limit) {
-		let inThrottle;
-		return function () {
-			const args = arguments;
-			const context = this;
-			if (!inThrottle) {
-				func.apply(context, args);
-				inThrottle = true;
-				setTimeout(() => (inThrottle = false), limit);
-			}
-		};
-	}
+function throttle(func, limit) {
+	let inThrottle;
+	return function () {
+		const args = arguments;
+		const context = this;
+		if (!inThrottle) {
+			func.apply(context, args);
+			inThrottle = true;
+			setTimeout(() => (inThrottle = false), limit);
+		}
+	};
+}
 
-	// --- THEME TOGGLE LOGIC ---
+document.addEventListener("DOMContentLoaded", function () {
 	const themeToggle = document.getElementById("theme-toggle");
+	const htmlEl = document.documentElement;
+
 	if (themeToggle) {
 		themeToggle.addEventListener("click", () => {
-			const htmlEl = document.documentElement;
-			htmlEl.classList.toggle("light-theme");
-			localStorage.setItem(
-				"theme",
-				htmlEl.classList.contains("light-theme") ? "light" : "dark"
-			);
+			if (htmlEl.classList.contains("light-theme")) {
+				htmlEl.classList.remove("light-theme");
+				localStorage.setItem("theme", "dark");
+			} else {
+				htmlEl.classList.add("light-theme");
+				localStorage.setItem("theme", "light");
+			}
+            // Перерисовываем график при смене темы
 			if (typeof window.renderSimulator === "function") {
 				setTimeout(() => window.renderSimulator(), 50);
 			}
 		});
 	}
 
-	// --- SCROLL REVEAL ANIMATIONS ---
+	document.body.addEventListener(
+		"mousemove",
+		throttle((e) => {
+			const { clientX, clientY } = e;
+			const x = Math.round((clientX / window.innerWidth) * 100);
+			const y = Math.round((clientY / window.innerHeight) * 100);
+			document.documentElement.style.setProperty("--glow-x", `${x}%`);
+			document.documentElement.style.setProperty("--glow-y", `${y}%`);
+		}, 100)
+	);
+
 	const observerOptions = {
 		root: null,
 		rootMargin: "0px",
-		threshold: 0.1,
+		threshold: 0,
 	};
+
 	let chartJsLoaded = false;
 	const scrollObserver = new IntersectionObserver((entries, observer) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
 				const el = entry.target;
 				const delay = parseInt(el.dataset.delay) || 0;
+
 				setTimeout(() => {
 					el.classList.add("is-visible");
+
 					if (el.id === "simulator" && !chartJsLoaded) {
 						chartJsLoaded = true;
 						const chartScript = document.createElement("script");
 						chartScript.src = "https://cdn.jsdelivr.net/npm/chart.js";
-						chartScript.onload = () => {
+						chartScript.onload = function () {
 							if (typeof window.renderSimulator === "function") {
 								window.renderSimulator();
 							}
 						};
 						document.body.appendChild(chartScript);
+					} else if (typeof window.renderSimulator === "function" && el.id === "simulator") {
+						window.renderSimulator();
 					}
 				}, delay);
+
 				observer.unobserve(el);
 			}
 		});
 	}, observerOptions);
+
 	document.querySelectorAll(".animate-on-scroll").forEach((el) => {
 		scrollObserver.observe(el);
 	});
 
-	// --- HERO CANVAS PARTICLES (DESKTOP ONLY) ---
-	if (window.matchMedia("(min-width: 769px)").matches) {
+	if (window.matchMedia("(min-width: 768px)").matches) {
 		const canvas = document.getElementById("hero-canvas");
 		if (canvas) {
 			const ctx = canvas.getContext("2d");
 			let particles = [];
 			let mouse = { x: null, y: null, radius: 150 };
 			const setCanvasSize = () => {
-				const header = document.querySelector(".header");
-				if (header) {
-					canvas.width = header.offsetWidth;
-					canvas.height = header.offsetHeight;
-				}
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
 			};
 			class Particle {
 				constructor() {
@@ -103,8 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
 							let force = (mouse.radius - distance) / mouse.radius;
 							let directionX = forceDirectionX * force * this.density;
 							let directionY = forceDirectionY * force * this.density;
-							this.x -= directionX * 0.1;
-							this.y -= directionY * 0.1;
+							this.x -= directionX;
+							this.y -= directionY;
 						}
 					}
 					if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
@@ -120,9 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 			const initParticles = () => {
 				particles = [];
-				const particleCount = Math.floor(
-					(canvas.width * canvas.height) / 15000
-				);
+				const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
 				for (let i = 0; i < particleCount; i++) {
 					particles.push(new Particle());
 				}
@@ -130,14 +149,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			const connect = () => {
 				for (let a = 0; a < particles.length; a++) {
 					for (let b = a; b < particles.length; b++) {
-						let distance =
-							(particles[a].x - particles[b].x) ** 2 +
-							(particles[a].y - particles[b].y) ** 2;
-						if (distance < 15000) {
+						let distance = (particles[a].x - particles[b].x) * (particles[a].x - particles[b].x) + (particles[a].y - particles[b].y) * (particles[a].y - particles[b].y);
+						if (distance < ((canvas.width / 9) * (canvas.height / 9)) / 7) {
 							let opacityValue = 1 - distance / 15000;
-							ctx.strokeStyle = `rgba(99, 102, 241, ${
-								opacityValue * 0.2
-							})`;
+							ctx.strokeStyle = `rgba(99, 102, 241, ${opacityValue * 0.2})`;
 							ctx.lineWidth = 1;
 							ctx.beginPath();
 							ctx.moveTo(particles[a].x, particles[a].y);
@@ -156,41 +171,22 @@ document.addEventListener("DOMContentLoaded", function () {
 				connect();
 				requestAnimationFrame(animateParticles);
 			};
-			window.addEventListener(
-				"resize",
-				throttle(() => {
-					setCanvasSize();
-					initParticles();
-				}, 200)
-			);
-			document.querySelector(".header").addEventListener(
-				"mousemove",
-				throttle((e) => {
-					const rect = canvas.getBoundingClientRect();
-					mouse.x = e.clientX - rect.left;
-					mouse.y = e.clientY - rect.top;
-				}, 50)
-			);
-			document.querySelector(".header").addEventListener("mouseleave", () => {
-				mouse.x = null;
-				mouse.y = null;
-			});
+			window.addEventListener("resize", throttle(() => { setCanvasSize(); initParticles(); }, 200));
+			window.addEventListener("mousemove", throttle((e) => { mouse.x = e.clientX; mouse.y = e.clientY; }, 50));
+			window.addEventListener("mouseout", () => { mouse.x = null; mouse.y = null; });
 			setCanvasSize();
 			initParticles();
 			animateParticles();
 		}
 	}
 
-	// --- AUDIENCE TABS ---
 	const audienceTriggers = document.querySelector(".audience-triggers");
 	if (audienceTriggers) {
 		audienceTriggers.addEventListener("click", (e) => {
 			const trigger = e.target.closest(".audience-trigger");
 			if (!trigger || trigger.classList.contains("active")) return;
 			audienceTriggers.querySelector(".active")?.classList.remove("active");
-			document
-				.querySelector(".audience-content.active")
-				?.classList.remove("active");
+			document.querySelector(".audience-content.active")?.classList.remove("active");
 			trigger.classList.add("active");
 			const content = document.getElementById(trigger.dataset.target);
 			if (content) {
@@ -199,24 +195,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	}
 
-	// =================================================================
-	// --- SIMULATOR LOGIC ---
-	// =================================================================
-	const simulatorElement = document.getElementById("simulator");
-	if (!simulatorElement) return;
-
 	const SIMULATION_MONTHS = 12;
 	const MAX_COMMISSION_SUM = 80;
 	const els = {
-		simulatorTitleSpan: document.getElementById("simulatorTitleSpan"),
 		price: document.getElementById("price"),
 		initialPartners: document.getElementById("initialPartners"),
 		partnerDuplication: document.getElementById("partnerDuplication"),
 		priceValue: document.getElementById("priceValue"),
 		initialPartnersValue: document.getElementById("initialPartnersValue"),
-		partnerDuplicationValue: document.getElementById(
-			"partnerDuplicationValue"
-		),
+		partnerDuplicationValue: document.getElementById("partnerDuplicationValue"),
 		classic: {
 			levels: document.getElementById("classicLevels"),
 			levelsValue: document.getElementById("classicLevelsValue"),
@@ -254,6 +241,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		classicPartnersLabel: document.getElementById("classicPartnersLabel"),
 		sethubblePartnersLabel: document.getElementById("sethubblePartnersLabel"),
 	};
+
+	if (!els.price || !els.chartCtx) return;
+
 	let salesChartInstance = null;
 	let currentMode = "author";
 	const config = {
@@ -262,35 +252,26 @@ document.addEventListener("DOMContentLoaded", function () {
 		sethubble: { levels: 5, commissions: { l1: 40, l2plus: 5 } },
 	};
 	const formatNumber = (num) => Math.round(num).toLocaleString("ru-RU");
+
 	function animateCounter(element, targetValue, isCurrency = false) {
-		let startValue =
-			parseFloat(element.textContent.replace(/[^0-9.-]+/g, "")) || 0;
+		let startValue = parseFloat(element.textContent.replace(/[^0-9.-]+/g, "")) || 0;
 		const duration = 1000;
 		let startTime = null;
 		function animationStep(currentTime) {
 			if (!startTime) startTime = currentTime;
 			const progress = Math.min((currentTime - startTime) / duration, 1);
-			const easeProgress = 1 - (1 - progress) ** 3;
-			const currentValue =
-				startValue + (targetValue - startValue) * easeProgress;
-			element.textContent = isCurrency
-				? "$" + formatNumber(currentValue)
-				: formatNumber(currentValue);
+			const easeProgress = 1 - Math.pow(1 - progress, 3);
+			const currentValue = startValue + (targetValue - startValue) * easeProgress;
+			element.textContent = isCurrency ? "$" + formatNumber(currentValue) : formatNumber(currentValue);
 			if (progress < 1) requestAnimationFrame(animationStep);
-			else
-				element.textContent = isCurrency
-					? "$" + formatNumber(targetValue)
-					: formatNumber(targetValue);
+			else element.textContent = isCurrency ? "$" + formatNumber(targetValue) : formatNumber(targetValue);
 		}
 		requestAnimationFrame(animationStep);
 	}
+
 	function runSimulation(modelConfig, mode) {
 		const { levels, commissions } = modelConfig;
-		const {
-			price,
-			partners: monthlyRecruits,
-			sales: duplicationRate,
-		} = config.general;
+		const { price, partners: monthlyRecruits, sales: duplicationRate, } = config.general;
 		let partnersByLevel = Array(levels).fill(0);
 		let totalPayout = 0;
 		let totalSalesCount = 0;
@@ -303,39 +284,23 @@ document.addEventListener("DOMContentLoaded", function () {
 				totalPayout += monthlyRecruits * price * (commissions[0] / 100);
 			}
 			for (let level = 0; level < levels - 1; level++) {
-				const newRecruitsFromDepth = Math.round(
-					partnersByLevel[level] * duplicationRate
-				);
+				const newRecruitsFromDepth = Math.round(partnersByLevel[level] * duplicationRate);
 				newPartnersThisMonth[level + 1] += newRecruitsFromDepth;
 				totalSalesCount += newRecruitsFromDepth;
-				totalPayout +=
-					newRecruitsFromDepth * price * (commissions[level + 1] / 100);
+				totalPayout += newRecruitsFromDepth * price * (commissions[level + 1] / 100);
 			}
-			partnersByLevel = partnersByLevel.map(
-				(p, i) => p + newPartnersThisMonth[i]
-			);
+			partnersByLevel = partnersByLevel.map((p, i) => p + newPartnersThisMonth[i]);
 			monthlyPartnersChart.push(partnersByLevel.reduce((a, b) => a + b, 0));
 		}
 		const totalPartners = partnersByLevel.reduce((a, b) => a + b, 0);
 		if (mode === "author") {
 			const totalRevenue = totalSalesCount * price;
-			const authorIncome =
-				levels > 0
-					? totalRevenue - totalPayout
-					: monthlyRecruits * SIMULATION_MONTHS * price;
+			const authorIncome = levels > 0 ? totalRevenue - totalPayout : monthlyRecruits * SIMULATION_MONTHS * price;
 			return { totalPartners, income: authorIncome, monthlyPartnersChart };
 		} else {
 			const partnerIncome = totalPayout;
 			return { totalPartners, income: partnerIncome, monthlyPartnersChart };
 		}
-	}
-	function fadeSwitchText(element, newText) {
-		if (!element || element.innerText === newText) return;
-		element.style.opacity = "0";
-		setTimeout(() => {
-			element.innerText = newText;
-			element.style.opacity = "1";
-		}, 200);
 	}
 	window.setSimulatorMode = function (newMode) {
 		if (newMode === currentMode) return;
@@ -345,31 +310,23 @@ document.addEventListener("DOMContentLoaded", function () {
 			btn.classList.toggle("active", btn.dataset.mode === newMode)
 		);
 		if (newMode === "author") {
-			fadeSwitchText(els.simulatorTitleSpan, "Калькулятор Дохода Автора");
-			fadeSwitchText(
-				els.simulatorSubtitle,
-				"Рассчитайте свой чистый доход как владелец продукта, за вычетом комиссий партнерам."
-			);
-			fadeSwitchText(els.priceLabel, "Цена Вашего Продукта");
-			fadeSwitchText(els.initialPartnersLabel, "Личных продаж в месяц");
-			fadeSwitchText(els.duplicationLabel, "Дупликация (продаж партнером)");
-			fadeSwitchText(els.classicIncomeLabel, "Ваш чистый доход");
-			fadeSwitchText(els.sethubbleIncomeLabel, "Ваш чистый доход");
-			fadeSwitchText(els.classicPartnersLabel, "Партнеров в сети (год)");
-			fadeSwitchText(els.sethubblePartnersLabel, "Партнеров в сети (год)");
+			els.simulatorSubtitle.innerText = "Рассчитайте свой чистый доход как владелец продукта, за вычетом комиссий партнерам.";
+			els.priceLabel.innerText = "Цена Вашего Продукта";
+			els.initialPartnersLabel.innerText = "Личных продаж в месяц";
+			els.duplicationLabel.innerText = "Дупликация (продаж партнером)";
+			els.classicIncomeLabel.innerText = "Ваш чистый доход";
+			els.sethubbleIncomeLabel.innerText = "Ваш чистый доход";
+			els.classicPartnersLabel.innerText = "Партнеров в сети (год)";
+			els.sethubblePartnersLabel.innerText = "Партнеров в сети (год)";
 		} else {
-			fadeSwitchText(els.simulatorTitleSpan, "Калькулятор Дохода Партнёра");
-			fadeSwitchText(
-				els.simulatorSubtitle,
-				"Рассчитайте свой комиссионный доход, продвигая чужой продукт и строя свою команду."
-			);
-			fadeSwitchText(els.priceLabel, "Цена Продукта");
-			fadeSwitchText(els.initialPartnersLabel, "Моих личных продаж в месяц");
-			fadeSwitchText(els.duplicationLabel, "Дупликация в моей команде");
-			fadeSwitchText(els.classicIncomeLabel, "Ваш комиссионный доход");
-			fadeSwitchText(els.sethubbleIncomeLabel, "Ваш комиссионный доход");
-			fadeSwitchText(els.classicPartnersLabel, "Партнеров в команде (год)");
-			fadeSwitchText(els.sethubblePartnersLabel, "Партнеров в команде (год)");
+			els.simulatorSubtitle.innerText = "Рассчитайте свой комиссионный доход, продвигая чужой продукт и строя свою команду.";
+			els.priceLabel.innerText = "Цена Продукта";
+			els.initialPartnersLabel.innerText = "Моих личных продаж в месяц";
+			els.duplicationLabel.innerText = "Дупликация в моей команде";
+			els.classicIncomeLabel.innerText = "Ваш комиссионный доход";
+			els.sethubbleIncomeLabel.innerText = "Ваш комиссионный доход";
+			els.classicPartnersLabel.innerText = "Партнеров в команде (год)";
+			els.sethubblePartnersLabel.innerText = "Партнеров в команде (год)";
 		}
 		window.renderSimulator();
 	};
@@ -382,19 +339,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		els.classic.l2Row.classList.toggle("hidden", config.classic.levels < 2);
 		let classicSubtitle = "Нет партнерки";
 		if (config.classic.levels > 0) {
-			classicSubtitle = `${
-				config.classic.levels
-			} ур.: ${config.classic.commissions
-				.slice(0, config.classic.levels)
-				.join("% + ")}%`;
+			classicSubtitle = `${config.classic.levels} ур.: ${config.classic.commissions.slice(0, config.classic.levels).join("% + ")}%`;
 		}
 		els.classic.subtitle.textContent = classicSubtitle;
 		els.sethubble.levelsValue.textContent = config.sethubble.levels;
 		els.sethubble.l1Row.classList.toggle("hidden", config.sethubble.levels < 1);
-		els.sethubble.l2plusRow.classList.toggle(
-			"hidden",
-			config.sethubble.levels < 2
-		);
+		els.sethubble.l2plusRow.classList.toggle("hidden", config.sethubble.levels < 2);
 		if (config.sethubble.levels > 1) {
 			els.sethubble.l2plusLabel.textContent = `Комиссия ур. 2-${config.sethubble.levels}, %`;
 		}
@@ -402,9 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (config.sethubble.levels > 0) {
 			let commsStr = `${config.sethubble.commissions.l1}%`;
 			if (config.sethubble.levels > 1)
-				commsStr += ` + ${config.sethubble.levels - 1}x${
-					config.sethubble.commissions.l2plus
-				}%`;
+				commsStr += ` + ${config.sethubble.levels - 1}x${config.sethubble.commissions.l2plus}%`;
 			sethubbleSubtitle = `${config.sethubble.levels} уровней: ${commsStr}`;
 		}
 		els.sethubble.subtitle.textContent = sethubbleSubtitle;
@@ -420,10 +368,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const currentTotal = levels > 1 ? l1 + (levels - 1) * l2plus : l1;
 		if (currentTotal > MAX_COMMISSION_SUM) {
 			if (changedInputId === "sethubbleL1" && levels > 1) {
-				l2plus = Math.max(
-					0,
-					Math.floor((MAX_COMMISSION_SUM - l1) / (levels - 1))
-				);
+				l2plus = Math.max(0, Math.floor((MAX_COMMISSION_SUM - l1) / (levels - 1)));
 				els.sethubble.l2plus.value = l2plus;
 			} else {
 				l1 = Math.max(0, MAX_COMMISSION_SUM - (levels - 1) * l2plus);
@@ -437,27 +382,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 	window.renderSimulator = function () {
-		if (!window.Chart || !els.chartCtx) return;
-
-		const classicCommsArray = [
-			parseInt(els.classic.l1.value) || 0,
-			parseInt(els.classic.l2.value) || 0,
-		];
-		const classicSimConfig = {
-			levels: config.classic.levels,
-			commissions: classicCommsArray,
-		};
-		const sethubbleCommsArray = Array(config.sethubble.levels)
-			.fill(0)
-			.map((_, i) =>
-				i === 0
-					? config.sethubble.commissions.l1
-					: config.sethubble.commissions.l2plus
-			);
-		const sethubbleSimConfig = {
-			levels: config.sethubble.levels,
-			commissions: sethubbleCommsArray,
-		};
+        if (!window.Chart || !els.chartCtx) return;
+		const classicCommsArray = [parseInt(els.classic.l1.value) || 0, parseInt(els.classic.l2.value) || 0,];
+		const classicSimConfig = { levels: config.classic.levels, commissions: classicCommsArray, };
+		const sethubbleCommsArray = Array(config.sethubble.levels).fill(0).map((_, i) => (i === 0 ? config.sethubble.commissions.l1 : config.sethubble.commissions.l2plus));
+		const sethubbleSimConfig = { levels: config.sethubble.levels, commissions: sethubbleCommsArray, };
 		const classicResults = runSimulation(classicSimConfig, currentMode);
 		const sethubbleResults = runSimulation(sethubbleSimConfig, currentMode);
 		animateCounter(els.classic.partners, classicResults.totalPartners);
@@ -465,58 +394,47 @@ document.addEventListener("DOMContentLoaded", function () {
 		animateCounter(els.sethubble.partners, sethubbleResults.totalPartners);
 		animateCounter(els.sethubble.income, sethubbleResults.income, true);
 		let incomeFactor = "неизмеримо";
-		if (classicResults.income > 0.01) {
+		if (classicResults.income > 0) {
 			const factor = sethubbleResults.income / classicResults.income;
-			incomeFactor =
-				factor < 1.1
-					? "почти столько же"
-					: `<span class="highlight">в ${factor.toFixed(1)} раз(а)</span>`;
-		} else if (sethubbleResults.income > 0) {
-			incomeFactor = "значительно";
+			incomeFactor = factor < 1 ? "почти столько же" : `<span class="highlight">в ${factor.toFixed(1)} раз(а)</span>`;
 		}
-		const incomeType =
-			currentMode === "author" ? "чистого дохода" : "комиссионного дохода";
+		const incomeType = currentMode === "author" ? "чистого дохода" : "комиссионного дохода";
 		els.conclusionText.innerHTML = `Модель SetHubble принесет вам ${incomeFactor} больше <b>${incomeType}</b> за год.`;
-		
-		// ✅ [КЛЮЧЕВОЙ ФИКС ДЛЯ ГРАФИКА]
-		const styles = getComputedStyle(simulatorElement);
+		if (salesChartInstance) salesChartInstance.destroy();
+		const labels = Array.from({ length: SIMULATION_MONTHS + 1 }, (_, i) => i === 0 ? "Старт" : `${i} мес`);
+		const chartLabel = currentMode === "author" ? "Партнеры в сети" : "Партнеры в команде";
+        
+        const simulatorElement = document.getElementById('simulator');
+        const styles = getComputedStyle(simulatorElement);
 		const grayColor = styles.getPropertyValue("--text-gray").trim();
 		const legendColor = styles.getPropertyValue("--text-light").trim();
 		const gridColor = styles.getPropertyValue("--glass-border").trim();
-		
-		if (salesChartInstance) salesChartInstance.destroy();
-		const labels = Array.from({ length: SIMULATION_MONTHS + 1 }, (_, i) =>
-			i === 0 ? "Старт" : `${i} мес`
-		);
-		const chartLabel =
-			currentMode === "author" ? "Партнеры в сети" : "Партнеры в команде";
+
 		salesChartInstance = new Chart(els.chartCtx, {
-    type: "line",
-    data: {
-        labels,
-        datasets: [
-            {
-                label: `${chartLabel} (Classic)`,
-                data: classicResults.monthlyPartnersChart,
-                // ✅ ИСПРАВЛЕНО: Возвращаем статичные цвета для 100% надежности
-                borderColor: '#ec4899', // Розовый цвет для "Классики"
-                borderWidth: 2,
-                backgroundColor: "rgba(236, 72, 153, 0.1)",
-                fill: true,
-                tension: 0.4,
-            },
-            {
-                label: `${chartLabel} (SetHubble)`,
-                data: sethubbleResults.monthlyPartnersChart,
-                // ✅ ИСПРАВЛЕНО: Возвращаем статичные цвета для 100% надежности
-                borderColor: '#00f7ff', // Неоновый цвет для "SetHubble"
-                borderWidth: 3,
-                backgroundColor: "rgba(0, 247, 255, 0.2)",
-                fill: true,
-                tension: 0.4,
-            },
-        ],
-    },
+			type: "line",
+			data: {
+				labels,
+				datasets: [
+					{
+						label: `${chartLabel} (Classic)`,
+						data: classicResults.monthlyPartnersChart,
+						borderColor: '#ec4899',
+						borderWidth: 2,
+						backgroundColor: "rgba(236, 72, 153, 0.1)",
+						fill: true,
+						tension: 0.4,
+					},
+					{
+						label: `${chartLabel} (SetHubble)`,
+						data: sethubbleResults.monthlyPartnersChart,
+						borderColor: '#00f7ff',
+						borderWidth: 3,
+						backgroundColor: "rgba(0, 247, 255, 0.2)",
+						fill: true,
+						tension: 0.4,
+					},
+				],
+			},
 			options: {
 				responsive: true,
 				maintainAspectRatio: false,
@@ -528,11 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					},
 				},
 				scales: {
-					y: {
-						beginAtZero: true,
-						grid: { color: gridColor },
-						ticks: { color: grayColor },
-					},
+					y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: grayColor }, },
 					x: { grid: { display: false }, ticks: { color: grayColor } },
 				},
 			},
@@ -543,29 +457,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		const { id, value } = e.target;
 		const val = parseFloat(value);
 		switch (id) {
-			case "price":
-				config.general.price = val;
-				break;
-			case "initialPartners":
-				config.general.partners = parseInt(val);
-				break;
-			case "partnerDuplication":
-				config.general.sales = val;
-				break;
-			case "classicLevels":
-				config.classic.levels = parseInt(val);
-				break;
-			case "sethubbleLevels":
-				config.sethubble.levels = parseInt(val);
-				validateSetHubbleCommissions(id);
-				break;
+			case "price": config.general.price = val; break;
+			case "initialPartners": config.general.partners = parseInt(val); break;
+			case "partnerDuplication": config.general.sales = val; break;
+			case "classicLevels": config.classic.levels = parseInt(val); break;
+			case "sethubbleLevels": config.sethubble.levels = parseInt(val); validateSetHubbleCommissions(id); break;
 			default:
 				const model = id.startsWith("classic") ? "classic" : "sethubble";
 				const key = id.replace(model, "").toLowerCase();
-				if (key === "l1" || key === "l2plus") {
+				if (key in config[model].commissions) {
 					config[model].commissions[key] = parseInt(val) || 0;
-				} else if (key === "l2") {
-					config.classic.commissions[1] = parseInt(val) || 0;
+				} else {
+					config[model].commissions[parseInt(key.replace("l", "")) - 1] = parseInt(val) || 0;
 				}
 				if (model === "sethubble") validateSetHubbleCommissions(id);
 				break;
@@ -581,7 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const btn = e.target.closest(".mode-switch-btn");
 		if (btn) setSimulatorMode(btn.dataset.mode);
 	});
-	// Initialization
+	
 	els.price.value = config.general.price;
 	els.initialPartners.value = config.general.partners;
 	els.partnerDuplication.value = config.general.sales;
@@ -592,21 +495,22 @@ document.addEventListener("DOMContentLoaded", function () {
 	els.sethubble.l1.value = config.sethubble.commissions.l1;
 	els.sethubble.l2plus.value = config.sethubble.commissions.l2plus;
 	updateSimulatorUI();
-	// Smart scroll from header
+});
+
+document.addEventListener("DOMContentLoaded", function () {
 	const pathLinks = document.querySelectorAll(".path-link");
-	if (pathLinks.length && simulatorElement) {
-		pathLinks.forEach((link) => {
-			link.addEventListener("click", function (event) {
-				event.preventDefault();
-				const targetMode = this.dataset.mode;
-				if (window.setSimulatorMode) {
-					window.setSimulatorMode(targetMode);
-				}
-				simulatorElement.scrollIntoView({
-					behavior: "smooth",
-					block: "center",
-				});
-			});
+	const simulatorSection = document.getElementById("simulator");
+	if (!pathLinks.length || !simulatorSection) { return; }
+	pathLinks.forEach((link) => {
+		link.addEventListener("click", function (event) {
+			event.preventDefault();
+			const targetMode = this.dataset.mode;
+			if (window.setSimulatorMode) {
+				window.setSimulatorMode(targetMode);
+			} else {
+				console.warn("Функция setSimulatorMode не найдена.");
+			}
+			simulatorSection.scrollIntoView({ behavior: "smooth", block: "start" });
 		});
-	}
+	});
 });
