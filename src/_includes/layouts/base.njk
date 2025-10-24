@@ -6,7 +6,6 @@
 		<title>{{ title or metadata.title }}</title>
 		<meta name="description" content="{{ description or metadata.description }}">
 
-		<!-- ✅ ДОБАВЛЕНО: Мгновенный скрипт для установки темы из localStorage -->
 		<script>
 			(function () {
 				const theme = localStorage.getItem("theme");
@@ -20,16 +19,14 @@
 			})();
 		</script>
 		
-		<!-- Подключение шрифтов оставляем, раз вы подтвердили, что они не проблема -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" media="print" onload="this.media='all'">
 		
 		<link rel="icon" href="{{ '/favicon.svg' | url }}" type="image/svg+xml">
-		<link type="application/rss+xml" rel="alternate" href="https://sethubble.ru/feed/feed.xml" title="Блог о SetHubble">
+		<link type="application/rss+xml" rel="alternate" href="https://blog.sethubble.ru/feed/feed.xml" title="Блог о SetHubble">
 
-		{# --- Используем наш обновленный CSS --- #}
-		<style>{% include "css/index.css" %}</style>
+		<link rel="stylesheet" href="/css/index.css">
 
 		<script type="module">{% include "node_modules/@zachleat/heading-anchors/heading-anchors.js" %}</script>
 	</head>
@@ -73,12 +70,9 @@
 			</div>
 		</div>
 
-		<!-- ✅ ДОБАВЛЕНО: Подключение общего скрипта для простой логики -->
+		<!-- ✅ УДАЛЕНА СТРОКА С getBundleFileUrl -->
 		<script src="/js/main.js" defer></script>
 		
-		<script type="module" src="{% getBundleFileUrl "js" %}"></script>
-		
-		<!-- Оптимизированная отложенная загрузка Яндекс.Метрики -->
 		<script type="text/javascript">
 			(function (m, e, t, r, i, k, a) {
 				m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };

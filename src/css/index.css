@@ -580,3 +580,108 @@ main picture img {
 	text-align: center;
 	margin-top: 60px;
 }
+/* --- СТИЛИ ДЛЯ БЛОКА "ПОСЛЕДНИЕ НОВОСТИ" НА ГЛАВНОЙ --- */
+.latest-news {
+	margin-bottom: 60px;
+	padding: 30px;
+	background: var(--card-bg);
+	border-radius: 20px;
+	border: 1px solid var(--border);
+}
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-bottom: 20px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid var(--border);
+}
+.section-title-small {
+	font-size: 1.8rem;
+	margin: 0;
+	color: var(--text-light);
+}
+.view-all-link {
+	color: var(--text-gray);
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.3s;
+}
+.view-all-link:hover {
+	color: var(--neon);
+}
+
+.news-snapshot-list {
+	list-style: none;
+	padding: 0;
+}
+.news-snapshot-item {
+	display: flex;
+	align-items: baseline;
+	gap: 20px;
+	padding: 15px 0;
+}
+.news-snapshot-item:not(:last-child) {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.news-snapshot-item time {
+	flex-shrink: 0;
+	width: 140px;
+	color: var(--text-gray);
+	font-size: 0.9rem;
+}
+.news-snapshot-item h3 {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 500;
+}
+.news-snapshot-item h3 a {
+	color: var(--text-light);
+	text-decoration: none;
+	transition: color 0.3s;
+}
+.news-snapshot-item h3 a:hover {
+	color: var(--primary);
+}
+
+@media (max-width: 600px) {
+	.news-snapshot-item {
+		flex-direction: column;
+		gap: 5px;
+		align-items: flex-start;
+	}
+	.news-snapshot-item time {
+		width: auto;
+		font-size: 0.8rem;
+	}
+}
+/* --- СТИЛИ ДЛЯ ТЕГОВ НА КАРТОЧКАХ ПОСТОВ --- */
+
+/* Используем Flexbox, чтобы "прижать" теги к низу карточки */
+.postlist-link {
+	display: flex;
+	flex-direction: column;
+}
+.post-card-content {
+	flex-grow: 1; /* Этот блок будет занимать все доступное пространство */
+}
+
+.post-card-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 20px; /* Отступ от текста до тегов */
+	padding-top: 15px;
+	border-top: 1px solid var(--border);
+}
+
+.post-tag-on-card {
+	background: rgba(0, 247, 255, 0.1);
+	color: var(--neon);
+	padding: 4px 10px;
+	border-radius: 20px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}

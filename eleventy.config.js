@@ -1,26 +1,24 @@
-import {
-	IdAttributePlugin,
-	InputPathToUrlTransformPlugin,
-	HtmlBasePlugin,
-} from "@11ty/eleventy";
+// eleventy.config.js (ФИНАЛЬНАЯ ВЕРСИЯ С РАСКОММЕНТИРОВАННЫМИ ФИЛЬТРАМИ)
+
+import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
 import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginNavigation from "@11ty/eleventy-navigation";
 import Image from "@11ty/eleventy-img";
-import pluginFilters from "./src/_config/filters.js"; // Обновите путь, если нужно
+
+// ✅ РАСКОММЕНТИРОВАНО: Убедитесь, что этот путь правильный
+import pluginFilters from "./src/_config/filters.js";
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function (eleventyConfig) {
 	// --- КОПИРОВАНИЕ СТАТИЧНЫХ ФАЙЛОВ И ПАПОК ---
-	// Копируем все, что не является шаблонами, в итоговую сборку
 	eleventyConfig.addPassthroughCopy("src/css");
 	eleventyConfig.addPassthroughCopy("src/js");
-	eleventyConfig.addPassthroughCopy("src/fonts"); // Если у вас есть папка со шрифтами
-	eleventyConfig.addPassthroughCopy("src/img"); // Если есть папка с изображениями
+	eleventyConfig.addPassthroughCopy("src/fonts");
 	eleventyConfig.addPassthroughCopy({ "src/public/": "/" });
 	eleventyConfig.addPassthroughCopy(
 		"src/blog/**/*.{jpg,jpeg,png,gif,svg,webp}"
-	); // Копируем картинки из постов
+	);
 
 	// --- ШОРТКОД ДЛЯ ИЗОБРАЖЕНИЙ ---
 	eleventyConfig.addNunjucksAsyncShortcode(
@@ -29,15 +27,18 @@ export default async function (eleventyConfig) {
 			if (!src) {
 				return;
 			}
-			let filepath = `${this.page.inputPath.substring(
+			let filepath = `./src${this.page.filePathStem.substring(
 				0,
-				this.page.inputPath.lastIndexOf("/")
+				this.page.filePathStem.lastIndexOf("/")
 			)}/${src}`;
+			if (src.startsWith("/")) {
+				filepath = `./src${src}`;
+			}
 
 			let metadata = await Image(filepath, {
 				widths: [400, 800, 1200, "auto"],
 				formats: ["webp", "jpeg"],
-				outputDir: "./_site/img/", // Итоговая папка для картинок
+				outputDir: "./_site/img/",
 				urlPath: "/img/",
 			});
 
@@ -62,8 +63,7 @@ export default async function (eleventyConfig) {
 		preAttributes: { tabindex: 0 },
 	});
 	eleventyConfig.addPlugin(pluginNavigation);
-	eleventyConfig.addPlugin(HtmlBasePlugin);
-	eleventyConfig.addPlugin(InputPathToUrlTransformPlugin);
+	eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
 
 	eleventyConfig.addPlugin(feedPlugin, {
 		type: "atom",
@@ -78,23 +78,22 @@ export default async function (eleventyConfig) {
 		},
 	});
 
+	// ✅ РАСКОММЕНТИРОВАНО: ВКЛЮЧАЕМ ФИЛЬТРЫ ОБРАТНО
 	eleventyConfig.addPlugin(pluginFilters);
-	eleventyConfig.addPlugin(IdAttributePlugin);
 
 	eleventyConfig.addShortcode("currentBuildDate", () =>
 		new Date().toISOString()
 	);
 
-	// --- ГЛАВНОЕ ИЗМЕНЕНИЕ: Указываем правильные папки ---
 	return {
 		templateFormats: ["md", "njk", "html"],
 		markdownTemplateEngine: "njk",
 		htmlTemplateEngine: "njk",
 		dir: {
-			input: "src", // Исходники теперь в 'src'
-			includes: "_includes", // Папка _includes ищется ВНУТРИ 'src'
-			data: "_data", // Папка _data ищется ВНУТРИ 'src'
-			output: "_site", // Результат сборки
+			input: "src",
+			includes: "_includes",
+			data: "_data",
+			output: "_site",
 		},
 	};
 }
