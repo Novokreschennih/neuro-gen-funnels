@@ -73,7 +73,7 @@ export default async function (eleventyConfig) {
 			language: "ru",
 			title: "Блог SetHubble",
 			subtitle: "Новости, обновления и инсайты.",
-			base: "https://blog.sethubble.ru/",
+			base: "https://sethubble.ru/",
 			author: { name: "SetHubble" },
 		},
 	});

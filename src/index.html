@@ -42,40 +42,47 @@
 
 		<style>
 			/* ===== BEGIN FONT DEFINITIONS ===== */
+			/* inter-300 - cyrillic_latin */
 			@font-face {
-				font-display: swap;
+				font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
 				font-family: "Inter";
 				font-style: normal;
 				font-weight: 300;
-				src: url("/fonts/inter-v12-latin-300.woff2") format("woff2");
+				src: url("../fonts/inter-v20-cyrillic_latin-300.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 			}
+			/* inter-regular - cyrillic_latin */
 			@font-face {
-				font-display: swap;
+				font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
 				font-family: "Inter";
 				font-style: normal;
 				font-weight: 400;
-				src: url("/fonts/inter-v12-latin-regular.woff2") format("woff2");
+				src: url("../fonts/inter-v20-cyrillic_latin-regular.woff2")
+					format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 			}
+			/* inter-500 - cyrillic_latin */
 			@font-face {
-				font-display: swap;
+				font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
 				font-family: "Inter";
 				font-style: normal;
 				font-weight: 500;
-				src: url("/fonts/inter-v12-latin-500.woff2") format("woff2");
+				src: url("../fonts/inter-v20-cyrillic_latin-500.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 			}
+
+			/* inter-700 - cyrillic_latin */
 			@font-face {
-				font-display: swap;
+				font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
 				font-family: "Inter";
 				font-style: normal;
 				font-weight: 700;
-				src: url("/fonts/inter-v12-latin-700.woff2") format("woff2");
+				src: url("../fonts/inter-v20-cyrillic_latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 			}
+			/* inter-900 - cyrillic_latin */
 			@font-face {
-				font-display: swap;
+				font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
 				font-family: "Inter";
 				font-style: normal;
 				font-weight: 900;
-				src: url("/fonts/inter-v12-latin-900.woff2") format("woff2");
+				src: url("../fonts/inter-v20-cyrillic_latin-900.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 			}
 			/* ===== END FONT DEFINITIONS ===== */
 
@@ -876,14 +883,12 @@
 			}
 
 			.simulator {
-				background: linear-gradient(
-					to bottom right,
-					rgba(15, 23, 42, 0.8),
-					rgba(2, 6, 23, 0.9)
-				);
+				background-color: var(
+					--bg-surface
+				); /* ✅ ИЗМЕНЕНИЕ: Сплошной темный фон */
 				border-radius: 30px;
 				padding: 60px;
-				margin: 60px 0;
+				margin: 40px 0;
 				border: 1px solid var(--glass-border);
 				box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), var(--glass-shadow);
 				position: relative;

@@ -91,6 +91,13 @@ document.addEventListener('DOMContentLoaded', function() {
             throw new Error('Не удалось получить 2D-контекст для canvas графика.');
         }
 
+        function initSimulator() {
+    // Если Chart.js не загрузился, ничего не делаем
+    if (typeof Chart === 'undefined') {
+        console.error("Chart.js is not loaded. Cannot initialize simulator.");
+        return;
+    }
+
         // --- 3. ОСНОВНАЯ ЛОГИКА КАЛЬКУЛЯТОРА ---
 
         const SIMULATION_MONTHS = 12;

@@ -1,20 +1,20 @@
 ---
 title: Калькулятор Дохода SetHubble
 layout: layouts/base.njk
+permalink: /calculator/index.html # Добавляем permalink для красивого URL
 eleventyNavigation:
   key: Калькулятор
   order: 2
 ---
 
-{# Подключаем стили и скрипты только для этой страницы #}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{# Подключаем стили только для этой страницы #}
 <link rel="stylesheet" href="{{ '/css/simulator.css' | url }}">
 
-{# ✅ [ИСПРАВЛЕНО] Полная, двухрежимная HTML-структура калькулятора #}
-<section id="simulator" class="simulator">
+{# ✅ ИЗМЕНЕНО: Добавлен класс 'island-dark', чтобы блок всегда был темным #}
+<section id="simulator" class="simulator island-dark">
     <div class="simulator-header">
-        <h2><span class="text-gradient">Калькулятор</span> Дохода</h2>
-        <p id="simulatorSubtitle" style="color: var(--text-gray); max-width: 700px; margin: auto; transition: opacity 0.3s;">Выберите свою роль и узнайте, сколько вы можете заработать за год. Будет показан идеальный вариант. Он не гарантирован</p>
+        <h2>Калькулятор Дохода</h2>
+        <p id="simulatorSubtitle" style="color: var(--text-gray); max-width: 700px; margin: auto; transition: opacity 0.3s;">Выберите свою роль и узнайте, сколько вы можете заработать за год. Будет показан идеальный вариант. Он не гарантирован.</p>
     </div>
     
     <div id="simulatorModeSwitcher" class="simulator-mode-switcher" data-mode="author">
@@ -46,7 +46,7 @@ eleventyNavigation:
             <p class="subtitle" id="classicSubtitle">2 уровня: 30% + 5%</p>
             <div class="simulator-controls">
                 <div class="control-group">
-                    <label style="display:flex; justify-content: space-between;">Глубина (уровни) <span class="value-display" id="classicLevelsValue" style="color: var(--text-gray);">2</span></label>
+                    <label style="display:flex; justify-content: space-between;">Глубина (уровни) <span class="value-display" id="classicLevelsValue">2</span></label>
                     <input type="range" id="classicLevels" class="slider" min="0" max="2" value="2" style="opacity: 0.7;">
                 </div>
                 <div class="control-row" id="classicL1Row">
@@ -72,21 +72,21 @@ eleventyNavigation:
             <p class="subtitle" id="sethubbleSubtitle">5 уровней: 40% + 4x5%</p>
              <div class="simulator-controls">
                 <div class="control-group">
-                    <label style="display:flex; justify-content: space-between; color: white;">Глубина (уровни) <span class="value-display" id="sethubbleLevelsValue" style="color: var(--neon);">5</span></label>
+                    <label style="display:flex; justify-content: space-between;">Глубина (уровни) <span class="value-display" id="sethubbleLevelsValue">5</span></label>
                     <input type="range" id="sethubbleLevels" class="slider" min="0" max="10" value="5">
                 </div>
                 <div class="control-row" id="sethubbleL1Row">
-                    <label for="sethubbleL1" style="color: white;">Комиссия ур. 1, %</label>
+                    <label for="sethubbleL1">Комиссия ур. 1, %</label>
                     <input type="number" id="sethubbleL1" class="number-input" value="40" min="0" max="90" step="1" style="border-color: var(--neon-glow);">
                 </div>
                 <div class="control-row" id="sethubbleL2plusRow">
-                    <label for="sethubbleL2plus" id="sethubbleL2plusLabel" style="color: white;">Комиссия ур. 2-10, %</label>
+                    <label for="sethubbleL2plus" id="sethubbleL2plusLabel">Комиссия ур. 2-10, %</label>
                     <input type="number" id="sethubbleL2plus" class="number-input" value="5" min="0" max="50" step="1" style="border-color: var(--neon-glow);">
                 </div>
                 <div class="warning" id="sethubbleWarning"></div>
             </div>
             <div class="metrics-container">
-                <div class="result-item"><div class="label" id="sethubblePartnersLabel">Партнеров в сети (год)</div><div class="value" id="sethubbleTotalPartners" style="color: var(--neon);">0</div></div>
+                <div class="result-item"><div class="label" id="sethubblePartnersLabel">Партнеров в сети (год)</div><div class="value" id="sethubbleTotalPartners">0</div></div>
                 <div class="income-box">
                     <span class="income-label" id="sethubbleIncomeLabel">Ваш чистый доход</span>
                     <div class="income-value" id="sethubbleAuthorIncome">$0</div>
@@ -102,4 +102,17 @@ eleventyNavigation:
     <div class="chart-container"><canvas id="salesChart"></canvas></div>
 </section>
 
-<script src="{{ '/js/simulator.js' | url }}" defer></script>
+<!-- ✅ ИЗМЕНЕНО: Используем тот же скрипт калькулятора, что и на лендинге -->
+<script>
+    // Этот маленький скрипт гарантирует, что Chart.js загрузится
+    // ПЕРЕД тем, как мы попытаемся запустить калькулятор.
+    const chartScript = document.createElement('script');
+    chartScript.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+    chartScript.onload = () => {
+        // Только после успешной загрузки Chart.js, мы подключаем скрипт самого калькулятора
+        const calcScript = document.createElement('script');
+        calcScript.src = '/js/calculator-landing.js';
+        document.body.appendChild(calcScript);
+    };
+    document.body.appendChild(chartScript);
+</script>
