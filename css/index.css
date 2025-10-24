@@ -1,6 +1,6 @@
 /* --- НАСТРОЙКИ ТЕМЫ --- */
 :root {
-	--primary: #6366f1; /* Основной акцентный цвет */
+	--primary: #6f71f3; /* Основной акцентный цвет */
 	--neon: #00f7ff; /* Цвет для ссылок и свечения */
 	--accent: #ec4899;
 	--neon: #00f7ff;
@@ -50,10 +50,11 @@ body::before {
 
 /* Обертки */
 .container {
-	padding: 40px 20px;
+	padding: 40px;
 	max-width: 1200px;
 	margin: 0 auto;
 }
+/* 
 .main-box {
 	background: var(--glass);
 	backdrop-filter: blur(30px);
@@ -63,7 +64,7 @@ body::before {
 	border: 1px solid var(--border);
 	box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
 }
-
+*/
 /* --- СТИЛИ ДЛЯ НОВОЙ ШАПКИ --- */
 
 header,
@@ -604,55 +605,7 @@ footer {
 .footer-meta p {
 	margin-top: 15px;
 }
-/* --- СТИЛИ ДЛЯ НОВОСТНОЙ ЛЕНТЫ --- */
-/* --- УЛУЧШЕННЫЕ СТИЛИ ДЛЯ НОВОСТНОЙ ЛЕНТЫ --- */
-.news-list {
-	display: flex;
-	flex-direction: column;
-	gap: 20px; /* Уменьшаем гэп между новостями */
-}
-.news-item {
-	display: grid;
-	grid-template-columns: 150px 1fr;
-	gap: 30px;
-	padding: 30px 0; /* Добавляем отступ сверху */
-	border-bottom: 1px solid var(--border);
-}
-.news-list > li:first-child {
-	padding-top: 10px; /* Убираем лишний отступ у первой новости */
-}
-.news-date {
-	font-weight: 600;
-	font-size: 1rem; /* Увеличиваем шрифт даты */
-	color: var(--gray);
-	padding-top: 4px; /* Небольшая вертикальная коррекция */
-}
-.news-content {
-	line-height: 1.7; /* Увеличиваем межстрочный интервал */
-}
-.news-title {
-	font-size: 1.5rem;
-	color: var(--light); /* Делаем заголовок белым и контрастным */
-	margin-bottom: 10px;
-	font-weight: 700;
-}
-.news-content p {
-	margin: 0;
-	color: var(--gray); /* Делаем текст новости светло-серым */
-	font-size: 1.1rem; /* Увеличиваем основной шрифт */
-}
 
-/* Адаптация для мобильных */
-@media (max-width: 600px) {
-	.news-item {
-		grid-template-columns: 1fr;
-		gap: 10px;
-		padding: 20px 0;
-	}
-	.news-date {
-		margin-bottom: 5px; /* Добавляем отступ под датой на мобильных */
-	}
-}
 /* --- СТИЛИ ДЛЯ ОПТИМИЗИРОВАННЫХ ИЗОБРАЖЕНИЙ В СТАТЬЯХ --- */
 .post-content picture {
 	display: block; /* Убирает лишние отступы */
@@ -1096,4 +1049,34 @@ main picture img {
 }
 .secondary-link:hover {
 	color: var(--primary);
+}
+/* --- СТИЛИ ДЛЯ ТЕГОВ НА КАРТОЧКАХ ПОСТОВ --- */
+
+/* Используем Flexbox, чтобы "прижать" теги к низу карточки */
+.postlist-link {
+	display: flex;
+	flex-direction: column;
+}
+.post-card-content {
+	flex-grow: 1; /* Этот блок будет занимать все доступное пространство */
+}
+
+.post-card-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 20px; /* Отступ от текста до тегов */
+	padding-top: 15px;
+	border-top: 1px solid var(--border);
+}
+
+.post-tag-on-card {
+	background: rgba(0, 247, 255, 0.1);
+	color: var(--neon);
+	padding: 4px 10px;
+	border-radius: 20px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
 }

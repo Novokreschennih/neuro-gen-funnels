@@ -24,7 +24,7 @@ permalink: "/archive/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNu
   <ol class="pagination-list">
     <li>
       {% if pagination.href.previous %}
-        <a href="{{ pagination.href.previous }}" class="pagination-link pagination-link-prev">← Новее</a>
+        <a href="{{ pagination.href.previous }}" class="pagination-link pagination-link-prev">←</a>
       {% else %}
         <span class="pagination-link-disabled">←</span>
       {% endif %}
@@ -38,7 +38,7 @@ permalink: "/archive/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNu
     {%- endfor %}
     <li>
       {% if pagination.href.next %}
-        <a href="{{ pagination.href.next }}" class="pagination-link pagination-link-next">Старее →</a>
+        <a href="{{ pagination.href.next }}" class="pagination-link pagination-link-next">→</a>
       {% else %}
         <span class="pagination-link-disabled">→</span>
       {% endif %}
