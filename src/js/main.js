@@ -1,86 +1,106 @@
-// --- ФУНКЦИЯ ДЛЯ LIGHTBOX ---
-function initLightbox() {
-    const triggers = document.querySelectorAll('a.lightbox-trigger');
-    if (triggers.length === 0) return;
+/**
+ * SetHubble - Main Shared Script
+ * Version: 8.1 (Lightbox Added)
+ * Описание: Этот скрипт содержит общую логику для всего сайта:
+ * тема, переключатели, якоря и лайтбокс.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+	// --- 1. Переключатель темы ---
+	const themeToggle = document.getElementById("theme-toggle");
+	if (themeToggle) {
+		themeToggle.addEventListener("click", () => {
+			const htmlEl = document.documentElement;
+			if (htmlEl.classList.contains("light-theme")) {
+				htmlEl.classList.remove("light-theme");
+				localStorage.setItem("theme", "dark");
+			} else {
+				htmlEl.classList.add("light-theme");
+				localStorage.setItem("theme", "light");
+			}
+			if (typeof window.renderSimulator === "function") {
+				setTimeout(() => window.renderSimulator(), 50);
+			}
+		});
+	}
 
-    const lightboxHTML = `
-        <div id="lightbox">
-            <span id="lightbox-close">&times;</span>
-            <img id="lightbox-image" src="">
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+	// --- 2. Переключатель ролей "Автор/Партнер" (в секции "Два пути к доходу") ---
+	const audienceTriggers = document.querySelector(".audience-triggers");
+	if (audienceTriggers) {
+		audienceTriggers.addEventListener("click", (e) => {
+			const trigger = e.target.closest(".audience-trigger");
+			if (!trigger || trigger.classList.contains("active")) return;
 
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImage = document.getElementById('lightbox-image');
-    const closeButton = document.getElementById('lightbox-close');
+			audienceTriggers.querySelector(".active")?.classList.remove("active");
+			document
+				.querySelector(".audience-content.active")
+				?.classList.remove("active");
 
-    const closeLightbox = () => {
-        lightbox.classList.remove('active');
-        setTimeout(() => { lightboxImage.setAttribute('src', ''); }, 300);
-    };
+			trigger.classList.add("active");
+			const content = document.getElementById(trigger.dataset.target);
+			if (content) {
+				content.classList.add("active");
+			}
+		});
+	}
 
-    document.addEventListener('click', function (e) {
-        const trigger = e.target.closest('a.lightbox-trigger');
-        if (trigger) {
-            e.preventDefault();
-            const imgSrc = trigger.getAttribute('href');
-            lightboxImage.setAttribute('src', imgSrc);
-            lightbox.classList.add('active');
-        }
-    });
+	// --- 3. Ссылки-якоря, ведущие к калькулятору ---
+	const pathLinks = document.querySelectorAll(".path-link");
+	const simulatorSection = document.getElementById("simulator");
+	if (pathLinks.length && simulatorSection) {
+		pathLinks.forEach((link) => {
+			link.addEventListener("click", function (event) {
+				event.preventDefault();
+				// Эта функция будет определена в calculator.js
+				if (typeof window.setSimulatorMode === "function") {
+					window.setSimulatorMode(this.dataset.mode);
+				}
+				simulatorSection.scrollIntoView({ behavior: "smooth", block: "start" });
+			});
+		});
+	}
 
-    lightbox.addEventListener('click', (e) => {
-        if (e.target.id === 'lightbox') {
-            closeLightbox();
-        }
-    });
-    closeButton.addEventListener('click', closeLightbox);
-}
+	// --- 4. ✅ ЛОГИКА ЛАЙТБОКСА (ДОБАВЛЕНО) ---
+	const lightboxTriggers = document.querySelectorAll("a.lightbox-trigger");
+	if (lightboxTriggers.length > 0) {
+		// Создаем HTML-элементы лайтбокса один раз
+		const lightbox = document.createElement("div");
+		lightbox.id = "lightbox";
 
-// --- ФУНКЦИЯ ДЛЯ АНИМАЦИЙ ПРИ СКРОЛЛЕ ---
-function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.postlist-item, .featured-post, .latest-news, .post-content, .links-nextprev, .blog-header, .footer');
-    
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    const delay = entry.target.classList.contains('postlist-item') ? index * 100 : 0;
-                    
-                    setTimeout(() => {
-                        entry.target.classList.add('is-visible');
-                    }, delay);
+		const lightboxImage = document.createElement("img");
+		const closeButton = document.createElement("span");
+		closeButton.id = "lightbox-close";
+		closeButton.innerHTML = "&times;";
 
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.01 // <-- ГЛАВНЫЙ ФИКС ДЛЯ СТАТЕЙ
-        });
-        
-        animatedElements.forEach(el => {
-            observer.observe(el);
-        });
-    } else {
-        animatedElements.forEach(el => {
-            el.classList.add('is-visible');
-        });
-    }
-}
+		lightbox.appendChild(lightboxImage);
+		lightbox.appendChild(closeButton);
+		document.body.appendChild(lightbox);
 
-// --- ГЛАВНЫЙ ОБРАБОТЧИК: ЗАПУСКАЕМ ВСЁ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ ---
-document.addEventListener('DOMContentLoaded', function() {
-    // --- ЭФФЕКТ "АВРОРА"-ФОН ---
-    document.body.addEventListener('mousemove', e => {
-        const { clientX, clientY } = e;
-        const x = Math.round((clientX / window.innerWidth) * 100);
-        const y = Math.round((clientY / window.innerHeight) * 100);
-        document.documentElement.style.setProperty('--glow-x', `${x}%`);
-        document.documentElement.style.setProperty('--glow-y', `${y}%`);
-    });
+		// Функция для закрытия
+		const closeLightbox = () => {
+			lightbox.classList.remove("active");
+		};
 
-    // Запускаем наши функции
-    initLightbox();
-    initScrollAnimations();
+		// Навешиваем слушатели на все картинки-триггеры
+		lightboxTriggers.forEach((trigger) => {
+			trigger.addEventListener("click", function (e) {
+				e.preventDefault(); // Отменяем стандартный переход по ссылке
+				lightboxImage.src = this.href; // Устанавливаем src для большой картинки
+				lightbox.classList.add("active"); // Показываем лайтбокс
+			});
+		});
+
+		// Закрытие по клику на фон, крестик или клавишу Escape
+		closeButton.addEventListener("click", closeLightbox);
+		lightbox.addEventListener("click", (e) => {
+			if (e.target === e.currentTarget) {
+				// Клик именно по фону, а не по картинке
+				closeLightbox();
+			}
+		});
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") {
+				closeLightbox();
+			}
+		});
+	}
 });

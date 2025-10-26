@@ -57,16 +57,6 @@ html.light-theme .simulator.island-dark .control-row label {
 	position: relative;
 	overflow: hidden;
 }
-.simulator {
-	background-color: var(--bg-surface); /* ✅ ИЗМЕНЕНИЕ: Сплошной темный фон */
-	border-radius: 30px;
-	padding: 60px;
-	margin: 40px 0;
-	border: 1px solid var(--glass-border);
-	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), var(--glass-shadow);
-	position: relative;
-	overflow: hidden;
-}
 
 .simulator-header {
 	text-align: center;
