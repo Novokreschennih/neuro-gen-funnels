@@ -1,92 +1,108 @@
-import { IdAttributePlugin, InputPathToUrlTransformPlugin, HtmlBasePlugin } from "@11ty/eleventy";
+// eleventy.config.js (ФИНАЛЬНАЯ ВЕРСИЯ С ВОССТАНОВЛЕННЫМИ КОЛЛЕКЦИЯМИ)
+
+import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
 import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginNavigation from "@11ty/eleventy-navigation";
 import Image from "@11ty/eleventy-img";
-
-import pluginFilters from "./_config/filters.js";
+import pluginFilters from "./src/_config/filters.js";
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
-export default async function(eleventyConfig) {
-	// --- КОЛЛЕКЦИИ ---
-	eleventyConfig.addCollection("posts", collectionApi => collectionApi.getFilteredByGlob("./content/blog/**/*.md"));
-	eleventyConfig.addCollection("news", collectionApi => collectionApi.getFilteredByGlob("./content/news/**/*.md"));
+export default async function (eleventyConfig) {
+	// ✅ ВОЗВРАЩЕНО И ИСПРАВЛЕНО: Определения коллекций
+	eleventyConfig.addCollection("posts", (collectionApi) =>
+		collectionApi.getFilteredByGlob("./src/content/blog/**/*.md")
+	);
+	eleventyConfig.addCollection(
+		"news",
+		(collectionApi) =>
+			collectionApi.getFilteredByGlob("./src/content/news/**/*.md") // Предполагая, что новости в src/news/
+	);
 
-	// --- КОПИРОВАНИЕ ФАЙЛОВ ---
-	eleventyConfig.addPassthroughCopy({ "./public/": "/" });
-	eleventyConfig.addPassthroughCopy("./css/");
-	eleventyConfig.addPassthroughCopy("./js/");
-	eleventyConfig.addPassthroughCopy({ "landing-src/": "/" });
-	eleventyConfig.addPassthroughCopy("./content/feed/pretty-atom-feed.xsl");
-	eleventyConfig.addPassthroughCopy("content/**/*.{jpg,jpeg,png,gif,svg,webp}");
+	// --- КОПИРОВАНИЕ СТАТИЧНЫХ ФАЙЛОВ И ПАПОК ---
+	eleventyConfig.addPassthroughCopy("src/css");
+	eleventyConfig.addPassthroughCopy("src/js");
+	eleventyConfig.addPassthroughCopy("src/fonts");
+	eleventyConfig.addPassthroughCopy({ "src/public/": "/" });
+	eleventyConfig.addPassthroughCopy("src/**/*.{jpg,jpeg,png,gif,svg,webp}");
+	eleventyConfig.addPassthroughCopy("src/_redirects");
 
-	// --- ШОРТКОД ДЛЯ КАРТИНОК С ФУНКЦИЕЙ ЛАЙТБОКСА (ГЛАВНЫЙ ФИКС) ---
-	eleventyConfig.addNunjucksAsyncShortcode("image", async function(src, alt, sizes = "100vw") {
-		if (!src) { return; }
-		let filepath = `${this.page.inputPath.substring(0, this.page.inputPath.lastIndexOf('/'))}/${src}`;
-		
-		let metadata = await Image(filepath, {
-			widths: [400, 800, 1200, "auto"],
-			formats: ["webp", "jpeg"],
-			outputDir: "./_site/img/",
-			urlPath: "/img/",
-		});
+	// --- ШОРТКОД ДЛЯ ИЗОБРАЖЕНИЙ ---
+	eleventyConfig.addNunjucksAsyncShortcode(
+		"image",
+		async function (src, alt, sizes = "100vw") {
+			if (!src) {
+				return;
+			}
+			let filepath = `./src${this.page.filePathStem.substring(
+				0,
+				this.page.filePathStem.lastIndexOf("/")
+			)}/${src}`;
+			if (src.startsWith("/")) {
+				filepath = `./src${src}`;
+			}
 
-		let imageAttributes = {
-			alt,
-			sizes,
-			loading: "lazy",
-			decoding: "async",
-		};
-		
-		// Генерируем HTML для тега <picture>
-		const pictureHTML = Image.generateHTML(metadata, imageAttributes);
+			let metadata = await Image(filepath, {
+				widths: [400, 800, 1200, "auto"],
+				formats: ["webp", "jpeg"],
+				outputDir: "./_site/img/",
+				urlPath: "/img/",
+			});
 
-		// Получаем URL самой большой картинки для ссылки лайтбокса
-		const largestImage = metadata.jpeg[metadata.jpeg.length - 1];
-		
-		// Оборачиваем <picture> в ссылку <a> с классом для JS
-		return `<a href="${largestImage.url}" class="lightbox-trigger">${pictureHTML}</a>`;
+			let imageAttributes = {
+				alt,
+				sizes,
+				loading: "lazy",
+				decoding: "async",
+			};
+
+			const pictureHTML = Image.generateHTML(metadata, imageAttributes);
+			const largestImage = metadata.jpeg[metadata.jpeg.length - 1];
+
+			return `<a href="${largestImage.url}" class="lightbox-trigger">${pictureHTML}</a>`;
+		}
+	);
+
+	// --- ПЛАГИНЫ И ПРОЧАЯ КОНФИГУРАЦИЯ ---
+	eleventyConfig.addWatchTarget("src/css/**/*.css");
+
+	eleventyConfig.addPlugin(pluginSyntaxHighlight, {
+		preAttributes: { tabindex: 0 },
 	});
-	// -----------------------------------------------------------------
-
-	// --- ОСТАЛЬНАЯ КОНФИГУРАЦИЯ (ОРИГИНАЛЬНАЯ) ---
-	eleventyConfig.addPreprocessor("drafts", "*", (data, content) => {
-		if (data.draft) data.title = `${data.title} (draft)`;
-		if(data.draft && process.env.ELEVENTY_RUN_MODE === "build") return false;
-	});
-
-	eleventyConfig.addWatchTarget("css/**/*.css");
-
-	eleventyConfig.addBundle("css", { toFileDirectory: "dist", bundleHtmlContentFromSelector: "style" });
-	eleventyConfig.addBundle("js", { toFileDirectory: "dist", bundleHtmlContentFromSelector: "script" });
-
-	eleventyConfig.addPlugin(pluginSyntaxHighlight, { preAttributes: { tabindex: 0 } });
 	eleventyConfig.addPlugin(pluginNavigation);
-	eleventyConfig.addPlugin(HtmlBasePlugin);
-	eleventyConfig.addPlugin(InputPathToUrlTransformPlugin);
+	eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
 
 	eleventyConfig.addPlugin(feedPlugin, {
-		type: "atom", outputPath: "/feed/feed.xml", stylesheet: "pretty-atom-feed.xsl",
-		collection: { name: "posts", limit: 10, },
+		type: "atom",
+		outputPath: "/feed/feed.xml",
+		collection: {
+			name: "posts", // Теперь эта коллекция снова существует
+			limit: 10,
+		},
 		metadata: {
-			language: "ru", title: "Блог SetHubble", subtitle: "Новости, обновления и инсайты.",
-			base: "https://blog.sethubble.ru/", author: { name: "SetHubble" }
-		}
+			language: "ru",
+			title: "Блог SetHubble",
+			subtitle: "Новости, обновления и инсайты.",
+			base: "https://sethubble.ru/",
+			author: { name: "SetHubble" },
+		},
 	});
 
 	eleventyConfig.addPlugin(pluginFilters);
-	eleventyConfig.addPlugin(IdAttributePlugin);
 
-	eleventyConfig.addShortcode("currentBuildDate", () => (new Date()).toISOString());
-};
+	eleventyConfig.addShortcode("currentBuildDate", () =>
+		new Date().toISOString()
+	);
 
-export const config = {
-	templateFormats: ["md", "njk", "html", "liquid", "11ty.js"],
-	markdownTemplateEngine: "njk",
-	htmlTemplateEngine: "njk",
-	dir: {
-		input: "content", includes: "../_includes",
-		data: "../_data", output: "_site"
-	},
-};
+	return {
+		templateFormats: ["md", "njk", "html"],
+		markdownTemplateEngine: "njk",
+		htmlTemplateEngine: "njk",
+		dir: {
+			input: "src",
+			includes: "_includes",
+			data: "_data",
+			output: "_site",
+		},
+	};
+}
