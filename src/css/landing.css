@@ -1559,6 +1559,11 @@ html.light-theme .theme-icon-moon {
 		padding: 8px;
 	}
 
+	.theme-toggle-btn svg {
+		width: 24px;
+		height: 24px;
+	}
+
 	.simulator-mode-switcher {
 		flex-direction: column;
 		border-radius: 20px;

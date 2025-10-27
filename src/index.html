@@ -40,8 +40,13 @@
 
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 		<link rel="stylesheet" href="/css/fonts.css" />
-		<link rel="stylesheet" href="/css/landing.css" />
-
+		<link
+			rel="preload"
+			href="/css/landing.css"
+			as="style"
+			onload="this.onload=null;this.rel='stylesheet'"
+		/>
+		<noscript><link rel="stylesheet" href="/css/landing.css" /></noscript>
 		<noscript>
 			<style>
 				.audience-content.active {
