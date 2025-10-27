@@ -755,3 +755,71 @@ a.lightbox-trigger:hover {
 	color: var(--accent);
 	transform: rotate(90deg);
 }
+/* ===================================================================
+   Адаптивность для мобильных устройств
+=================================================================== */
+
+@media (max-width: 768px) {
+	/* --- УМЕНЬШАЕМ ЗАГОЛОВКИ ВНУТРИ СТАТЕЙ И НОВОСТЕЙ --- */
+	article h1 {
+		font-size: 2rem; /* было 3rem */
+		line-height: 1.25;
+	}
+
+	article h2 {
+		font-size: 1.6rem; /* было 2.2rem */
+	}
+
+	article h3 {
+		font-size: 1.3rem; /* было ~1.5rem */
+	}
+
+	article p,
+	article li {
+		font-size: 1rem; /* было 1.1rem */
+	}
+
+	/* --- УМЕНЬШАЕМ ЗАГОЛОВКИ НА КАРТОЧКАХ ПОСТОВ --- */
+	.postlist-link h2 {
+		font-size: 1.4rem; /* было 1.6rem */
+	}
+
+	.featured-post-content h2 {
+		font-size: 1.8rem; /* было 2.5rem */
+	}
+
+	.featured-post-content p {
+		font-size: 1.1rem;
+	}
+
+	.section-title,
+	.page-title {
+		font-size: 2rem; /* было 2.5rem */
+	}
+
+	/* --- АДАПТИВНОСТЬ ШАПКИ И ДРУГИХ ЭЛЕМЕНТОВ (УЖЕ БЫЛО, НО ДЛЯ КОНТЕКСТА) --- */
+	header {
+		flex-direction: column;
+		gap: 20px;
+	}
+	.nav {
+		gap: 1.5em;
+	}
+	.main-nav {
+		gap: 15px;
+	}
+	.nav-link {
+		font-size: 0.9rem;
+		padding: 8px 10px;
+	}
+}
+
+@media (max-width: 480px) {
+	/* Дополнительные правки для самых маленьких экранов */
+	article h1 {
+		font-size: 1.8rem;
+	}
+	.container {
+		padding: 20px;
+	}
+}
