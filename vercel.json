@@ -1,14 +1,13 @@
 {
 	"trailingSlash": true,
-
 	"redirects": [
 		{
-			"source": "/start",
+			"source": "/start{/}?",
 			"destination": "https://sethubble.com/ru/p_qdr",
 			"permanent": true
 		},
 		{
-			"source": "/full-faq",
+			"source": "/full-faq{/}?",
 			"destination": "https://sethubble.com/ru/p_qdr",
 			"permanent": true
 		}
