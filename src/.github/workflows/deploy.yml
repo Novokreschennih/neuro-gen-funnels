@@ -1,0 +1,59 @@
+# Название workflow, которое будет отображаться в GitHub
+name: Deploy to Yandex Cloud
+
+# Условие запуска: при любом пуше в основную ветку (main или master)
+on:
+  push:
+    branches:
+      - main # Если ваша основная ветка называется master, замените main на master
+
+jobs:
+  # Название единственной задачи в нашем workflow
+  build-and-deploy:
+    # Запускать на последней версии Ubuntu
+    runs-on: ubuntu-latest
+
+    steps: # Список шагов, которые нужно выполнить
+      # Шаг 1: Скачиваем код из репозитория
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Шаг 2: Настраиваем среду Node.js для сборки сайта
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # Укажите вашу версию Node.js
+
+      # Шаг 3: Устанавливаем зависимости проекта (Eleventy и плагины)
+      - name: Install dependencies
+        run: npm install
+
+      # Шаг 4: Собираем сайт командой Eleventy
+      - name: Build 11ty project
+        run: npx @11ty/eleventy
+
+      # Шаг 5: Загружаем собранный сайт в бакет Yandex S3
+      - name: Deploy to Yandex S3
+        # Используем готовое действие для синхронизации с S3-совместимым хранилищем
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          # --delete удаляет из бакета файлы, которых больше нет в сборке
+          args: --acl public-read --delete
+        env:
+          # Имя вашего бакета в Yandex Cloud
+          AWS_S3_BUCKET: "sethubble.ru"
+          # Используем ключи, которые мы сохранили в секретах GitHub
+          AWS_ACCESS_KEY_ID: ${{ secrets.YC_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_KEY }}
+          # Указываем специальный адрес (endpoint) для Yandex Object Storage
+          AWS_S3_ENDPOINT: "https://storage.yandexcloud.net"
+          # Указываем, какую папку загружать (результат сборки 11ty)
+          SOURCE_DIR: "_site"
+
+      # Шаг 6: (Важно!) Очищаем кэш CDN, чтобы изменения применились сразу
+      #- name: Invalidate CDN Cache
+      #  run: |
+      #    curl -i -X POST \
+      #   -H "Authorization: Api-Key ${{ secrets.YC_API_KEY }}" \
+      #    "https://api.cloud.yandex.net/cdn/v1/resources/<ID_ВАШЕГО_CDN_РЕСУРСА>/purge" \
+      #   -d '{"paths": ["/*"]}'
