@@ -9,8 +9,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      # ... шаги 1-4 (checkout, setup node, install, build) остаются без изменений ...
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -25,9 +23,8 @@ jobs:
       - name: Build 11ty project
         run: npx @11ty/eleventy
 
-      # Шаг 5: Deploy to Yandex S3 (остается без изменений)
       - name: Deploy to Yandex S3
-        uses: jakejarvis/s3-sync-action@master
+        uses: jakejarvis/s3-sync-action@v0.5.0
         with:
           args: --acl public-read --delete
         env:
@@ -37,17 +34,16 @@ jobs:
           AWS_S3_ENDPOINT: "https://storage.yandexcloud.net"
           SOURCE_DIR: "_site"
 
-      # Шаг 6: Получаем IAM-токен (НОВЫЙ ШАГ)
       - name: Get IAM token
         id: get_iam_token
-        uses: actions-yc/auth-action@v1.0.0 # Готовое действие для аутентификации
+        uses: yandex-cloud/github-actions@v1
         with:
-          yc_sa_json_credentials: ${{ secrets.YC_SA_AUTHORIZED_KEY }}
+          yc-sa-json-credentials: ${{ secrets.YC_SA_AUTHORIZED_KEY }}
 
-      # Шаг 7: Очищаем кэш CDN, используя IAM-токен (ОБНОВЛЕННЫЙ ШАГ)
       - name: Invalidate CDN Cache
+        if: success()
         run: |
           curl -i -X POST \
-          -H "Authorization: Bearer ${{ steps.get_iam_token.outputs.iam_token }}" \ # <-- Используем IAM-токен
-          "https://api.cloud.yandex.net/cdn/v1/resources/bc8ruo2vjetwytvp3xpy/purge" \ # <-- Не забудьте вставить ID
+          -H "Authorization: Bearer ${{ steps.get_iam_token.outputs.iam_token }}" \
+          https://api.cloud.yandex.net/cdn/v1/resources/bc8ruo2vjetwytvp3xpy/purge \
           -d '{"paths": ["/*"]}'
