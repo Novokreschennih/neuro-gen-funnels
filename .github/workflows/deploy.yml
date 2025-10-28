@@ -40,7 +40,7 @@ jobs:
       # Шаг 6: Получаем IAM-токен (НОВЫЙ ШАГ)
       - name: Get IAM token
         id: get_iam_token
-        uses: yandex-cloud/auth-action@v1.2 # Готовое действие для аутентификации
+        uses: actions-yc/auth-action@v1 # Готовое действие для аутентификации
         with:
           yc_sa_json_credentials: ${{ secrets.YC_SA_AUTHORIZED_KEY }}
 
