@@ -36,7 +36,7 @@ jobs:
 
       - name: Get IAM token
         id: get_iam_token
-        uses: yandex-cloud/github-actions@v1
+        uses: yc-actions/yc-iam-token@v1
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_AUTHORIZED_KEY }}
 
