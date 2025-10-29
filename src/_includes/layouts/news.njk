@@ -22,7 +22,7 @@ layout: layouts/base.njk
 	{{ content | safe }}
 </article>
 
-{# --- ГЛАВНЫЙ ФИКС: Навигация теперь ищет в коллекции `news` --- #}
+
 {%- set previousPost = collections.news | getPreviousCollectionItem %}
 {%- set nextPost = collections.news | getNextCollectionItem %}
 {%- if nextPost or previousPost %}
