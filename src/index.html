@@ -50,10 +50,6 @@
 		</noscript>
 	</head>
 	<body>
-		<!-- СОДЕРЖИМОЕ BODY ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ -->
-		<!-- ... Вставьте сюда всё содержимое тега <body> из предыдущего ответа ... -->
-		<!-- ... до тега <footer> ... -->
-
 		<div class="nav-container">
 			<nav class="main-nav">
 				<div class="nav-links-group">
@@ -451,7 +447,7 @@
 						Займите свое место в глобальной структуре прямо сейчас.
 					</p>
 					<a
-						href="https://sethubble.ru/start"
+						href="https://sethubble.com/ru/p_qdr"
 						target="_blank"
 						class="cta-button"
 						>Создать Аккаунт на sethubble.com →</a
@@ -602,7 +598,7 @@
 					<p style="color: var(--text-gray); font-size: 1.1rem">
 						Остались вопросы?
 						<a
-							href="https://sethubble.ru/full-faq"
+							href="https://sethubble.com/ru/p_qdr"
 							target="_blank"
 							style="
 								color: var(--primary);
@@ -681,10 +677,8 @@
 				"ym"
 			);
 
-			// ID вашего счетчика
-			var metrikaId = 104313731; // <-- ЗАМЕНИТЕ НА ВАШ ID
+			var metrikaId = 104313731;
 
-			// Функция для инициализации Метрики
 			var initMetrika = function () {
 				ym(metrikaId, "init", {
 					clickmap: true,
@@ -692,7 +686,7 @@
 					accurateTrackBounce: true,
 					webvisor: true,
 				});
-				// Убираем слушатели, чтобы Метрика не инициализировалась повторно
+
 				[
 					"scroll",
 					"mousemove",
@@ -705,7 +699,6 @@
 				});
 			};
 
-			// Навешиваем слушатели на первое действие пользователя
 			[
 				"scroll",
 				"mousemove",
@@ -725,6 +718,5 @@
 					alt=""
 				/></div
 		></noscript>
-		<!-- /ОПТИМИЗИРОВАННАЯ ЗАГРУЗКА ЯНДЕКС.МЕТРИКИ -->
 	</body>
 </html>
