@@ -50,6 +50,6 @@ jobs:
             -d '{"paths": ["/*"]}')
           if [ "$response" != "200" ]; then
             echo "CDN purge failed. HTTP status: $response"
-            echo "Response body: $(curl -s -X POST -H 'Authorization: Bearer ${{ steps.get_iam_token.outputs.iam_token }}' https://api.cloud.yandex.net/cdn/v1/resources/ВАШ_КОРРЕКТНЫЙ_ID/purge -d '{"paths": ["/*"]}')"
+            echo "Response body: $(curl -s -X POST -H 'Authorization: Bearer ${{ steps.get_iam_token.outputs.iam_token }}' https://api.cloud.yandex.net/cdn/v1/resources/bc8ruo2vjetwytvp3xpy/purge -d '{"paths": ["/*"]}')"
             exit 1
           fi
