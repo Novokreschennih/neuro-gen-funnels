@@ -8,12 +8,13 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
 
@@ -34,22 +35,69 @@ jobs:
           AWS_S3_ENDPOINT: "https://storage.yandexcloud.net"
           SOURCE_DIR: "_site"
 
-      - name: Get IAM token
+      - name: Get IAM Token
         id: get_iam_token
-        uses: yc-actions/yc-iam-token@v1
+        uses: yandex-cloud/github-actions@v1
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_AUTHORIZED_KEY }}
 
-      - name: Invalidate CDN Cache
+      - name: Validate IAM Token
         if: success()
         run: |
+          if [ -z "${{ steps.get_iam_token.outputs.iam_token }}" ]; then
+            echo "❌ Error: IAM token is empty. Check:"
+            echo "  1. Secret YC_SA_AUTHORIZED_KEY contains valid SA JSON key"
+            echo "  2. SA has required roles (cdn.admin, storage.editor)"
+            exit 1
+          else
+            echo "✅ IAM token obtained (length: ${#steps.get_iam_token.outputs.iam_token})"
+          fi
+
+      - name: Invalidate CDN Cache
+        if: success()
+        env:
+          CDN_RESOURCE_ID: bc8ruo2vjetwytvp3xpy # Замените на ваш ID!
+        run: |
+          # Формируем URL
+          URL="https://api.cloud.yandex.net/cdn/v1/resources/$CDN_RESOURCE_ID/purge"
+
+          # Отправляем запрос
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             -X POST \
             -H "Authorization: Bearer ${{ steps.get_iam_token.outputs.iam_token }}" \
-            https://api.cloud.yandex.net/cdn/v1/resources/bc8ruo2vjetwytvp3xpy/purge \
+            -H "Content-Type: application/json" \
+            "$URL" \
             -d '{"paths": ["/*"]}')
-          if [ "$response" != "200" ]; then
-            echo "CDN purge failed. HTTP status: $response"
-            echo "Response body: $(curl -s -X POST -H 'Authorization: Bearer ${{ steps.get_iam_token.outputs.iam_token }}' https://api.cloud.yandex.net/cdn/v1/resources/bc8ruo2vjetwytvp3xpy/purge -d '{"paths": ["/*"]}')"
-            exit 1
-          fi
+
+          # Анализируем ответ
+          case "$response" in
+            200)
+              echo "✅ CDN cache invalidated successfully (HTTP 200)"
+              ;;
+            202)
+              echo "⚠️ CDN purge accepted, processing in background (HTTP 2 prepared)"
+              ;;
+            400)
+              echo "❌ Bad Request (400). Check:"
+              echo "  - JSON format in -d '{'paths': ['/*']}'"
+              echo "  - CDN_RESOURCE_ID value"
+              exit 1
+              ;;
+            403)
+              echo "❌ Forbidden (403). SA lacks required role (cdn.admin)."
+              exit 1
+              ;;
+            404)
+              echo "❌ Not Found (404). Check CDN_RESOURCE_ID: $CDN_RESOURCE_ID"
+              exit 1
+              ;;
+            *)
+              echo "❌ Unexpected error (HTTP $response). Full response:"
+              curl -s -X POST \
+                -H "Authorization: Bearer ${{ steps.get_iam_token.outputs.iam_token }}" \
+                -H "Content-Type: application/json" \
+                "$URL" \
+                -d '{"paths": ["/*"]}'
+              exit 1
+              ;;
+          esac
