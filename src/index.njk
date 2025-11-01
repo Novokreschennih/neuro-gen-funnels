@@ -1,0 +1,27 @@
+{% extends "layouts/base.njk" %}
+
+{# --- МЕТАДАННЫЕ СТРАНИЦЫ --- #}
+{% set title = settings.lead_magnet_page.title %}
+{% set description = settings.lead_magnet_page.subheadline %}
+{% set permalink = "/" %}
+
+{# --- УНИКАЛЬНЫЕ СТИЛИ ЭТОЙ СТРАНИЦЫ --- #}
+{% block pageStyles %}
+	<style>
+		/* ... СКОПИРУЙТЕ СЮДА ВЕСЬ БЛОК <style> ИЗ ФАЙЛА "AI Сделает 90% Работы..." ... */
+	</style>
+{% endblock %}
+
+{# --- УНИКАЛЬНЫЙ КОНТЕНТ ЭТОЙ СТРАНИЦЫ --- #}
+{% block content %}
+	{# ... СКОПИРУЙТЕ СЮДА ВЕСЬ HTML-КОД (только `<div>...</div>`) ИЗ ФАЙЛА "AI Сделает 90% Работы..." ... #}
+	{# ... А ЗАТЕМ ЗАМЕНИТЕ В НЕМ ТЕКСТЫ И ССЫЛКИ НА ПЕРЕМЕННЫЕ: #}
+	
+	<h1 class="main-title-lm">{{ settings.lead_magnet_page.headline | safe }}</h1>
+	<p class="subtitle-lm">{{ settings.lead_magnet_page.subheadline | safe }}</p>
+	<a href="{{ settings.integrations.links.lead_magnet_bot }}" class="cta-button-lm pulse-animation floating">
+		{{ settings.lead_magnet_page.cta_button_text }}
+	</a>
+	
+	{# ... и так далее для всех текстов ... #}
+{% endblock %}
