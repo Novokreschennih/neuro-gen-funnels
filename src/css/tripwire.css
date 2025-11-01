@@ -98,14 +98,26 @@
 .trust-block { animation-delay: 0.3s; }
 .path-steps { animation-delay: 0.4s; }
 .price-block { animation-delay: 0.5s; }
+/* ✅ ИСПРАВЛЕННЫЙ БЛОК */
 .cta-button {
-    animation: fade-in-up 0.9s 0.6s forwards, 
-               pulse-glow 2.5s infinite 2s;
+    /* Сначала анимация появления, потом, через 2.5 секунды, запускаем "подергивание" */
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) 0.6s forwards, 
+               subtle-shake 3s infinite 2.5s; /* 3s - длительность всего цикла */
 }
-@keyframes pulse-glow {
-    0% { box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4); }
-    50% { box-shadow: 0 15px 40px rgba(230, 126, 34, 0.6); }
-    100% { box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4); }
+
+/* Анимация "подергивания" */
+@keyframes subtle-shake {
+  /* Анимация происходит только в первые 10% времени,
+     остальные 90% времени (примерно 2.7 секунды) кнопка стоит на месте. */
+  0%, 10%, 100% { 
+    transform: translateX(0); 
+  }
+  2%, 6% { 
+    transform: translateX(-5px) rotate(-1deg); 
+  }
+  4%, 8% { 
+    transform: translateX(5px) rotate(1deg); 
+  }
 }
 .cta-button {
     background: linear-gradient(45deg, var(--accent-color), #d35400);
