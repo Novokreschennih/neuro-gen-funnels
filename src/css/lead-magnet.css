@@ -1,0 +1,55 @@
+:root {
+    --primary-color-lm: #8e44ad; 
+    --secondary-color-lm: #3498db;
+}
+
+/* Уникальный стиль для списка преимуществ на главной */
+.benefits-list-lm {
+    list-style: none;
+    padding: 30px;
+    margin: 40px auto;
+    max-width: 600px;
+    text-align: left;
+
+    /* ✅ Эффект "матового стекла" перенесен сюда */
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.benefits-list-lm li {
+    font-size: 1.15rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+}
+
+.benefits-list-lm li .bullet-icon-lm {
+    font-size: 1.4em;
+    margin-right: 15px;
+    color: var(--accent-color-lm);
+    line-height: 1.5;
+}
+
+.benefits-list-lm li .bullet-text-lm strong {
+    font-weight: 700;
+    color: var(--text-color-lm);
+}
+
+.cta-details-lm {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 20px;
+}
+
+/* Адаптивность */
+@media (max-width: 700px) {
+    .main-title { font-size: 2.2em; }
+    .subtitle { font-size: 1.15em; }
+    .benefits-list-lm li { font-size: 1.05rem; }
+    .cta-button { font-size: 1.1rem; padding: 16px 35px; }
+}
