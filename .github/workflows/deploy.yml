@@ -1,36 +1,59 @@
-name: Deploy to Yandex Cloud
+# Название workflow, которое будет отображаться во вкладке "Actions"
+name: Deploy to GitHub Pages
 
+# Условие запуска: workflow будет запускаться при каждом пуше в основную ветку
 on:
   push:
     branches:
-      - main
+      - main # ⚠️ Убедитесь, что это название вашей основной ветки (может быть 'master')
+
+# Настраиваем права доступа для GITHUB_TOKEN, чтобы action мог публиковать на Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Отменяем любые предыдущие запуски этого workflow, чтобы всегда развертывалась только последняя версия
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  # Единственная задача: собрать и развернуть
+  deploy:
+    # Указываем, что задача должна запускаться в последней версии Ubuntu
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    
     steps:
-      - name: Checkout code
+      # Шаг 1: Скачиваем код из репозитория
+      - name: Checkout
         uses: actions/checkout@v4
 
+      # Шаг 2: Настраиваем среду Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "18" # Укажите вашу версию Node.js
+          cache: "npm" # Включаем кеширование зависимостей для ускорения сборки
 
+      # Шаг 3: Устанавливаем зависимости проекта
       - name: Install dependencies
         run: npm install
 
-      - name: Build 11ty project
+      # Шаг 4: Собираем статический сайт с помощью Eleventy
+      - name: Build with Eleventy
         run: npx @11ty/eleventy
 
-      - name: Deploy to Yandex S3
-        uses: jakejarvis/s3-sync-action@v0.5.0
+      # Шаг 5: Готовим артефакт для публикации на GitHub Pages
+      # Этот action упаковывает нашу папку _site в специальный формат
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          args: --acl public-read --delete
-        env:
-          AWS_S3_BUCKET: "sethubble.ru"
-          AWS_ACCESS_KEY_ID: ${{ secrets.YC_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_KEY }}
-          AWS_S3_ENDPOINT: "https://storage.yandexcloud.net"
-          SOURCE_DIR: "_site"
+          # Указываем путь к папке с готовым сайтом
+          path: ./_site
+
+      # Шаг 6: Развертываем артефакт на GitHub Pages
+      # Этот action берет упакованный сайт и делает его доступным в интернете
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
