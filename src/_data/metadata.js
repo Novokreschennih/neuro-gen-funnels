@@ -1,11 +1,11 @@
 export default {
-	title: "Блог о SetHubble",
-	url: "https://sethubble.ru/", 
+	title: "Нейро-Генератор Автоворонок",
+	url: "https://neuro-gen.ru/", 
 	language: "ru",
-	description: "Новости, обновления и инсайты про SetHubble.",
+	description: "Новости, обновления и инсайты.",
 	author: {
-		name: "SetHubble",
+		name: "Neurogen",
 		email: "i@inovok.ru", 
-		url: "https://sethubble.ru/" 
+		url: "https://neuro-gen.ru/" 
 	}
 }
