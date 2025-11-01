@@ -22,11 +22,11 @@
             {{- settings.lead_magnet_page.subheadline | safe -}}
         </p>
 
-        <ul class="benefits-list">
+        <ul class="benefits-list-lm"> {# ✅ Имя класса возвращено #}
             {%- for benefit in settings.lead_magnet_page.benefits -%}
             <li>
-                <span class="icon">{{ benefit.icon }}</span>
-                <span class="text">{{ benefit.text | safe }}</span>
+                <span class="bullet-icon-lm">{{ benefit.icon }}</span> {# ✅ Имя класса возвращено #}
+                <span class="bullet-text-lm">{{ benefit.text | safe }}</span> {# ✅ Имя класса возвращено #}
             </li>
             {%- endfor -%}
         </ul>
@@ -34,7 +34,7 @@
         <a href="{{ settings.integrations.links.lead_magnet_bot }}" class="cta-button">
             {{- settings.lead_magnet_page.cta_button_text -}}
         </a>
-        <p class="cta-details">
+        <p class="cta-details-lm"> {# ✅ Имя класса возвращено #}
             (Нажми и получи мгновенный доступ в нашем Telegram-боте!)
         </p>
     </div>
