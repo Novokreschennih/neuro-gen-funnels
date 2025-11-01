@@ -129,25 +129,6 @@
     transform: translateY(-5px) scale(1.03);
 }
 
-/* Анимация "подергивания" для привлечения внимания */
-.cta-button--shaking {
-    /* Эта анимация будет применяться только к кнопкам с этим дополнительным классом */
-    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards, 
-               subtle-shake 3s infinite 2.5s;
-}
-
-@keyframes subtle-shake {
-  0%, 10%, 100% { transform: translateY(0); } /* Убрали rotate для более чистого эффекта */
-  2%, 6% { transform: translateX(-5px); }
-  4%, 8% { transform: translateX(5px); }
-}
-.cta-button {
-    background: linear-gradient(45deg, var(--accent-color), #d35400);
-}
-/* src/css/tripwire.css */
-
-/* ... (все стили, которые там уже есть) ... */
-
 
 /* ==========================================================================
    ✅ НОВЫЙ БЛОК: Стили для списка "Умный Способ Оплаты"
