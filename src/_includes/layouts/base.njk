@@ -12,8 +12,7 @@
 	</head>
 	<body>
 
-		{# "Дырка" для основного контента страницы #}
-		{{ content | safe }}
+		{% block mainContent %}{% endblock %}
 		
 		{# Подключаем скрипт Яндекс.Метрики #}
 		<script src="/js/y-metrika.js" defer></script>
