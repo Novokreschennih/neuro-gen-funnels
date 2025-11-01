@@ -1,80 +1,22 @@
 <!doctype html>
-<html lang="{{ metadata.language }}">
+<html lang="ru">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>{{ title or metadata.title }}</title>
-		<meta name="description" content="{{ description or metadata.description }}">
-
-		<script>
-			(function () {
-				const theme = localStorage.getItem("theme");
-				if (theme === "light") {
-					document.documentElement.classList.add("light-theme");
-				} else if (theme === "dark") {
-					document.documentElement.classList.remove("light-theme");
-				} else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-					document.documentElement.classList.add("light-theme");
-				}
-			})();
-		</script>
+		<title>{{ title or settings.site.name }}</title>
+		<meta name="description" content="{{ description or settings.site.description }}">
+		<link rel="icon" href="/favicon.ico">
 		
-		
-		
-		<link rel="icon" href="{{ '/favicon.svg' | url }}" type="image/svg+xml">
-		<link type="application/rss+xml" rel="alternate" href="https://sethubble.ru/feed/feed.xml" title="Блог о SetHubble">
-		<link rel="stylesheet" href="/css/index.css">
-		<link rel="stylesheet" href="/css/fonts.css" />
-
-		
-
-
-		<script type="module">{% include "node_modules/@zachleat/heading-anchors/heading-anchors.js" %}</script>
+		{# Блок для уникальных стилей каждой страницы #}
+		{% block pageStyles %}{% endblock %}
 	</head>
 	<body>
-		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
 
-		<div class="container">
-			<div class="main-box">
-
-				<header>
-					<a href="/blog/" class="home-link">{{ metadata.title }}</a>
-				
-					<nav>
-						<h2 class="visually-hidden">Top level navigation menu</h2>
-						<ul class="nav">
-						{%- for entry in collections.all | eleventyNavigation %}
-							<li class="nav-item"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
-						{%- endfor %}
-						</ul>
-					</nav>
-					<a href="/" class="back-to-site">На лендинг →</a>
-				</header>
-
-				<main id="main">
-					<heading-anchors>
-						{{ content | safe }}
-					</heading-anchors>
-				</main>
-
-				<footer>
-					<div class="footer-cta">
-						<h2>Готовы присоединиться к экосистеме?</h2>
-						<a href="https://sethubble.com/ru/p_qdr" target="_blank" class="cta-button">Создать аккаунт SetHubble</a>
-					</div>
-				
-					<div class="footer-meta">
-						<a href="{{ '/tags/' | url }}">Посмотреть все теги</a>						
-					</div>
-				</footer>
-			
-			</div>
-		</div>
-
+		{# "Дырка" для основного контента страницы #}
+		{{ content | safe }}
 		
-		<script src="/js/main.js" defer></script>
-		<script src="/js/y-metrika.js" defer></script>		
-		
-		<noscript><div><img src="https://mc.yandex.ru/watch/104313731" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+		{# Подключаем скрипт Яндекс.Метрики #}
+		<script src="/js/y-metrika.js" defer></script>
+		<noscript><div><img src="https://mc.yandex.ru/watch/{{ settings.integrations.yandex_metrika_id }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 	</body>
 </html>
