@@ -173,7 +173,7 @@
    ========================================================================== */
 
 /* Делаем жирный текст желтым внутри этих уникальных блоков */
-.feature-list .text strong,
+.h1 strong .feature-list .text strong,
 .trust-block h3 strong,
 .trust-block p strong,
 .path-steps .text strong,
