@@ -2,11 +2,16 @@
 
 {# --- МЕТАДАННЫЕ --- #}
 {% set title = settings.tripwire_page.title %}
-{# permalink теперь не нужен, так как имя файла уже правильное #}
 
-{# --- УНИКАЛЬНЫЕ СТИЛИ --- #}
+{# --- ПОДКЛЮЧАЕМ УНИКАЛЬНЫЕ СТИЛИ ЭТОЙ СТРАНИЦЫ --- #}
 {% block pageStyles %}
-<link rel="stylesheet" href="/css/tripwire.css">
+  <link rel="stylesheet" href="/css/tripwire.css">
+  <style>
+    /* Дополнительные стили для нового блока, можно потом перенести в tripwire.css */
+    .smart-payment-list { list-style: none; padding-left: 0; margin-top: 20px; }
+    .smart-payment-list li { position: relative; padding-left: 30px; margin-bottom: 15px; }
+    .smart-payment-list li::before { content: '⚡'; color: var(--accent-color); position: absolute; left: 0; font-size: 1.4em; }
+  </style>
 {% endblock %}
 
 {# --- УНИКАЛЬНЫЙ КОНТЕНТ --- #}
@@ -33,6 +38,7 @@
             <p>{{ settings.tripwire_page.trust_block.text }}</p>
         </div>
         
+        <h3 class="main-title" style="font-size: 2em; margin-top: 60px;">{{ settings.tripwire_page.path_section_headline }}</h3>
         <ul class="path-steps">
             {% for step in settings.tripwire_page.path_steps %}
             <li>
@@ -44,6 +50,16 @@
             </li>
             {% endfor %}
         </ul>
+        
+        <div class="trust-block">
+            <h3>💡 {{ settings.smart_payment_block.headline }}</h3>
+            <p>{{ settings.smart_payment_block.text }}</p>
+            <ul class="smart-payment-list">
+                {% for benefit in settings.smart_payment_block.benefits %}
+                    <li>{{ benefit | safe }}</li>
+                {% endfor %}
+            </ul>
+        </div>
         
         <div class="price-block">
             <div class="old-price">{{ settings.tripwire_page.price_old }}</div>
