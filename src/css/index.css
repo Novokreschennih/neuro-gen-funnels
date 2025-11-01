@@ -117,3 +117,47 @@ body {
         transform: translateY(0);
     }
 }
+
+/* src/css/index.css */
+
+/* ... (все ваши предыдущие стили: body, .page-container, и т.д.) ... */
+
+
+/* ==========================================================================
+   4. ОБЩИЕ СТИЛИ ДЛЯ КНОПОК CTA (Call To Action)
+   ========================================================================== */
+
+.cta-button {
+    display: inline-block;
+    padding: 20px 50px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border-radius: 50px;
+    margin: 30px auto 20px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* Анимация появления для всех кнопок */
+    opacity: 0;
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+.cta-button:hover {
+    transform: translateY(-5px) scale(1.03);
+}
+
+/* Анимация "подергивания" для привлечения внимания */
+.cta-button--shaking {
+    /* Эта анимация будет применяться только к кнопкам с этим дополнительным классом */
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards, 
+               subtle-shake 3s infinite 2.5s;
+}
+
+@keyframes subtle-shake {
+  0%, 10%, 100% { transform: translateY(0); } /* Убрали rotate для более чистого эффекта */
+  2%, 6% { transform: translateX(-5px); }
+  4%, 8% { transform: translateX(5px); }
+}
