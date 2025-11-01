@@ -81,10 +81,10 @@ export default async function (eleventyConfig) {
 		},
 		metadata: {
 			language: "ru",
-			title: "Блог SetHubble",
+			title: "Нейро-Генератор Автоворонок",
 			subtitle: "Новости, обновления и инсайты.",
-			base: "https://sethubble.ru/",
-			author: { name: "SetHubble" },
+			base: "https://neuro-gen.ru/",
+			author: { name: "neuro-gen" },
 		},
 	});
 
