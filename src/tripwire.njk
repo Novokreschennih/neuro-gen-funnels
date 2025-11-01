@@ -1,9 +1,8 @@
----
-layout: layouts/base.njk
-title: {{ settings.tripwire_page.title }}
-permalink: "/practitioner-offer/index.html"
+{% extends "layouts/base.njk" %}
 
----
+{# --- МЕТАДАННЫЕ СТРАНИЦЫ --- #}
+{% set title = settings.tripwire_page.title %}
+{% set permalink = "/practitioner-offer/index.html" %}
 
 {# --- ПОДКЛЮЧАЕМ УНИКАЛЬНЫЕ СТИЛИ ЭТОЙ СТРАНИЦЫ --- #}
 {% block pageStyles %}
