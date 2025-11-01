@@ -51,12 +51,13 @@
             {% endfor %}
         </ul>
         
+        {# ✅ ИСПРАВЛЕННЫЙ И ДОПОЛНЕННЫЙ БЛОК #}
         <div class="trust-block">
             <h3>💡 {{ settings.smart_payment_block.headline }}</h3>
             <p>{{ settings.smart_payment_block.text }}</p>
             <ul class="smart-payment-list">
-                {% for benefit in settings.smart_payment_block.benefits %}
-                    <li>{{ benefit | safe }}</li>
+                {% for item in settings.smart_payment_block.benefits %}
+                    <li>{{ item | safe }}</li>
                 {% endfor %}
             </ul>
         </div>
