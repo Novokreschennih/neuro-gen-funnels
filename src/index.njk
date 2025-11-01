@@ -71,13 +71,13 @@
 
 {# --- УНИКАЛЬНЫЙ КОНТЕНТ ЭТОЙ СТРАНИЦЫ --- #}
 {% block mainContent %}
-<div class="landing-neuro-magic-container-craftum" style="font-family: 'Roboto', sans-serif; --primary-color-lm: #8e44ad; --secondary-color-lm: #3498db; --accent-color-lm: #f1c40f; --text-color-lm: #ffffff; --dark-text-color-lm: #2c3e50; background-color: rgb(48, 43, 99); color: var(--text-color-lm); padding: 20px 0; width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; position: relative; overflow: hidden;">
-    <div class="content-wrapper-lm">
-        <h1 class="main-title-lm">
+<div class="page-container">
+    <div class="content-wrapper">
+        <h1 class="main-title">
             {{- settings.lead_magnet_page.headline | safe -}}
         </h1>
 
-        <p class="subtitle-lm">
+        <p class="subtitle">
             {{- settings.lead_magnet_page.subheadline | safe -}}
         </p>
 
@@ -90,14 +90,14 @@
             {%- endfor -%}
         </ul>
 
-        <a href="{{ settings.integrations.links.lead_magnet_bot }}" class="cta-button-lm pulse-animation floating">
+        <a href="{{ settings.integrations.links.lead_magnet_bot }}" class="cta-button">
             {{- settings.lead_magnet_page.cta_button_text -}}
         </a>
         <p class="cta-details-lm">
             (Нажми и получи мгновенный доступ в нашем Telegram-боте!)
         </p>
     </div>
-    {# Подключаем скрипт, если он нужен именно на этой странице #}
+    
     <script src="/js/footer-script.js" defer></script>
 </div>
 {% endblock %}
