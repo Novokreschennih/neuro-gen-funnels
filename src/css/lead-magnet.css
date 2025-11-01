@@ -1,55 +1,78 @@
-:root {
-    --primary-color-lm: #8e44ad; 
-    --secondary-color-lm: #3498db;
-}
-
 /* Уникальный стиль для списка преимуществ на главной */
 .benefits-list-lm {
     list-style: none;
-    padding: 30px;
-    margin: 40px auto;
-    max-width: 600px;
+    padding: 35px;
+    margin: 50px auto;
+    max-width: 650px;
     text-align: left;
-
-    /* ✅ Эффект "матового стекла" перенесен сюда */
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
 .benefits-list-lm li {
     font-size: 1.15rem;
     margin-bottom: 20px;
     display: flex;
-    align-items: flex-start;
-    color: rgba(255, 255, 255, 0.95);
+    align-items: center;
+    color: rgba(255, 255, 255, 0.9);
     line-height: 1.6;
+}
+.benefits-list-lm li:last-child {
+    margin-bottom: 0;
 }
 
 .benefits-list-lm li .bullet-icon-lm {
-    font-size: 1.4em;
-    margin-right: 15px;
-    color: var(--accent-color-lm);
-    line-height: 1.5;
+    font-size: 1.5em;
+    margin-right: 20px;
+    color: var(--accent-color);
 }
 
 .benefits-list-lm li .bullet-text-lm strong {
     font-weight: 700;
-    color: var(--text-color-lm);
+    color: var(--text-color);
 }
 
 .cta-details-lm {
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.7);
     margin-top: 20px;
 }
 
-/* Адаптивность */
-@media (max-width: 700px) {
-    .main-title { font-size: 2.2em; }
-    .subtitle { font-size: 1.15em; }
-    .benefits-list-lm li { font-size: 1.05rem; }
-    .cta-button { font-size: 1.1rem; padding: 16px 35px; }
+/* --- АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ ЭТОЙ СТРАНИЦЫ --- */
+.main-title,
+.subtitle,
+.benefits-list-lm,
+.cta-button,
+.cta-details-lm {
+    opacity: 0; /* Изначально скрыты */
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+/* Каскадное появление с задержкой */
+.subtitle { animation-delay: 0.15s; }
+.benefits-list-lm { animation-delay: 0.3s; }
+.cta-button { animation-delay: 0.5s; }
+.cta-details-lm { animation-delay: 0.65s; }
+
+/* Анимация пульсации для главной кнопки */
+.cta-button {
+    /* Применяем две анимации: появление и бесконечную пульсацию */
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s forwards, 
+               pulse-glow 2.5s infinite 1s;
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 10px 25px rgba(241, 183, 51, 0.3); }
+    50% { box-shadow: 0 15px 40px rgba(241, 183, 51, 0.5), 0 0 20px rgba(241, 196, 15, 0.2); }
+    100% { box-shadow: 0 10px 25px rgba(241, 183, 51, 0.3); }
+}
+
+/* --- АДАПТИВНОСТЬ --- */
+@media (max-width: 768px) {
+    .main-title { font-size: 2.5em; }
+    .subtitle { font-size: 1.2em; }
 }
