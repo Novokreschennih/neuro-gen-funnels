@@ -1,80 +1,174 @@
 {% extends "layouts/base.njk" %}
 
-{# --- МЕТАДАННЫЕ СТРАНИЦЫ --- #}
+{# --- МЕТАДАННЫЕ --- #}
 {% set title = settings.tripwire_page.title %}
-{% set permalink = "/practitioner-offer/index.html" %}
+{# permalink теперь не нужен, так как имя файла уже правильное #}
 
-{# --- ПОДКЛЮЧАЕМ УНИКАЛЬНЫЕ СТИЛИ ЭТОЙ СТРАНИЦЫ --- #}
+{# --- УНИКАЛЬНЫЕ СТИЛИ --- #}
 {% block pageStyles %}
-  <link rel="stylesheet" href="/css/tripwire.css">
+<style>
+/* Специфичные переменные для этой страницы */
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #16A085;
+    --accent-color: #e67e22;
+}
+
+/* --- Структура карточек --- */
+.feature-list, .path-steps, .trust-block {
+    list-style: none;
+    padding: 30px;
+    margin: 40px auto;
+    max-width: 750px;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+.feature-list li, .path-steps li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 25px;
+}
+.feature-list li:last-child, .path-steps li:last-child {
+    margin-bottom: 0;
+}
+.feature-list .icon, .path-steps .icon {
+    font-size: 2em;
+    margin-right: 20px;
+    color: var(--secondary-color);
+    width: 40px;
+    text-align: center;
+}
+.feature-list .text strong, .path-steps .text strong {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+.feature-list .text p, .path-steps .text p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+.path-steps .icon {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    color: var(--accent-color);
+}
+.trust-block {
+    text-align: center;
+    border-left: 4px solid var(--primary-color);
+}
+.trust-block h3 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    margin: 0 0 15px;
+}
+.trust-block p {
+    font-size: 1.2em;
+    line-height: 1.7;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* --- Блок с ценой --- */
+.price-block {
+    margin: 60px 0;
+}
+.price-block .old-price {
+    font-size: 1.4em;
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 0.8;
+}
+.price-block .new-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 5em;
+    font-weight: 900;
+    color: #2ecc71;
+    margin: 10px 0;
+    text-shadow: 0 0 30px rgba(46, 204, 113, 0.7);
+}
+.price-block .price-note {
+    font-size: 1.1em;
+    color: rgba(255, 255, 255, 0.8);
+}
+/* --- Анимации --- */
+.main-title, .subtitle, .feature-list, .trust-block, .path-steps, .price-block, .cta-button {
+    opacity: 0;
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+.subtitle { animation-delay: 0.1s; }
+.feature-list { animation-delay: 0.2s; }
+.trust-block { animation-delay: 0.3s; }
+.path-steps { animation-delay: 0.4s; }
+.price-block { animation-delay: 0.5s; }
+.cta-button {
+    animation: fade-in-up 0.9s 0.6s forwards, 
+               pulse-glow 2.5s infinite 2s;
+}
+@keyframes pulse-glow {
+    0% { box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4); }
+    50% { box-shadow: 0 15px 40px rgba(230, 126, 34, 0.6); }
+    100% { box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4); }
+}
+.cta-button {
+    background: linear-gradient(45deg, var(--accent-color), #d35400);
+}
+</style>
 {% endblock %}
 
-{# --- УНИКАЛЬНЫЙ КОНТЕНТ ЭТОЙ СТРАНИЦЫ --- #}
+{# --- УНИКАЛЬНЫЙ КОНТЕНТ --- #}
 {% block mainContent %}
-<div class="tripwire-container-yrslv-ultra" style="font-family: 'Roboto', sans-serif; --primary-color-yrslv: #4A90E2; --secondary-color-yrslv: #16A085; --accent-color-yrslv: #e67e22; --text-color-yrslv: #E0E0E0; --dark-text-color-yrslv: #121212; --card-bg: rgba(30, 30, 46, 0.85); --plan-bg: #1e1e2e; --plan-border: #444466; background: none;">
-    <div class="tripwire-box-yrslv-ultra">
-        <div class="header-yrslv-ultra">
-            <span class="icon-yrslv-ultra">🚀</span>
-            <h1>{{ settings.tripwire_page.headline }}</h1>
-            <p>{{ settings.tripwire_page.subheadline }}</p>
-        </div>
-
-        <div class="features-list-yrslv-ultra">
+<div class="page-container">
+    <div class="content-wrapper">
+        <h1 class="main-title">{{ settings.tripwire_page.headline }}</h1>
+        <p class="subtitle">{{ settings.tripwire_page.subheadline }}</p>
+        
+        <ul class="feature-list">
             {% for feature in settings.tripwire_page.features %}
-            <div class="feature-item-yrslv-ultra">
-                <span class="icon-feature-yrslv-ultra">{{ feature.icon }}</span>
-                <div>
+            <li>
+                <div class="icon">{{ feature.icon }}</div>
+                <div class="text">
                     <strong>{{ feature.title }}</strong>
                     <p>{{ feature.description }}</p>
                 </div>
-            </div>
+            </li>
             {% endfor %}
-        </div>
+        </ul>
 
-        <div class="trust-block-yrslv-ultra">
-            <h3><span class="lightbulb-icon">💡</span> {{ settings.tripwire_page.trust_block.headline }}</h3>
+        <div class="trust-block">
+            <h3>💡 {{ settings.tripwire_page.trust_block.headline }}</h3>
             <p>{{ settings.tripwire_page.trust_block.text }}</p>
         </div>
-
-        <div class="path-section-yrslv-ultra">
-            <h3>Как это работает? Твой быстрый старт в 3 шага:</h3>
+        
+        <ul class="path-steps">
             {% for step in settings.tripwire_page.path_steps %}
-            <div class="path-step-yrslv-ultra">
-                <div class="step-number-path-yrslv-ultra">{{ loop.index }}</div>
-                <div class="step-content-yrslv-ultra">
+            <li>
+                <div class="icon">{{ loop.index }}</div>
+                <div class="text">
                     <strong>{{ step.title }}</strong>
                     <p>{{ step.description }}</p>
                 </div>
-            </div>
+            </li>
             {% endfor %}
+        </ul>
+        
+        <div class="price-block">
+            <div class="old-price">{{ settings.tripwire_page.price_old }}</div>
+            <div class="new-price">{{ settings.tripwire_page.price_new }}</div>
+            <div class="price-note">(Единоразовая инвестиция)</div>
         </div>
         
-        <div class="trust-block-yrslv-ultra">
-            <h3><span class="lightbulb-icon">💡</span> Что значит "Умный Способ Оплаты"?</h3>
-            <p>Ты не просто покупаешь систему. Ты приобретаешь продукт через платформу SetHubble, которая автоматически делает тебя партнером. Это дает тебе три ключевых преимущества:</p>
-            <div class="smart-payment-explanation-yrslv-ultra">
-                <ul class="smart-payment-list-yrslv-ultra">
-                    <li><strong>Максимальная Выгода:</strong> Ты получаешь 50% с каждой личной продажи. Это одна из самых щедрых программ на рынке.</li>
-                    <li><strong>Настоящий Пассивный Доход:</strong> Ты строишь пассивный доход, получая проценты с продаж твоей команды на 2 уровня в глубину.</li>
-                    <li><strong>Честность и Автоматизация:</strong> Все расчеты и выплаты происходят автоматически и прозрачно на платформе SetHubble.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="price-wrapper-yrslv-ultra">
-            <span class="old-price-yrslv-ultra">{{ settings.tripwire_page.price_old }}</span>
-            <div class="price-yrslv-ultra">{{ settings.tripwire_page.price_new }}</div>
-            <p>(Единоразовая инвестиция)</p>
-        </div>
-
-        <div class="cta-section-yrslv-ultra">
-            <a href="{{ settings.integrations.links.payment_practitioner }}" class="cta-button-yrslv-ultra">
-                {{ settings.tripwire_page.cta_button_text }}
-            </a>
-        </div>
+        <a href="{{ settings.integrations.links.payment_practitioner }}" class="cta-button">
+            {{ settings.tripwire_page.cta_button_text }}
+        </a>
     </div>
-    
-    {# Подключаем тот же скрипт, что и на главной #}
     <script src="/js/footer-script.js" defer></script>
 </div>
 {% endblock %}
