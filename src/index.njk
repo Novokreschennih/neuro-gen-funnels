@@ -1,40 +1,48 @@
-{% extends "layouts/base.njk" %}
+---
+layout: "layouts/base.njk"
+title: "AI Сделает 90% Работы, чтобы ты Заработал"
+description: "Получи БЕСПЛАТНЫЙ 'Навигатор по Онлайн-Доходу' и запусти свой первый онлайн-проект без опыта и риска."
+permalink: "/"
+---
 
-{# --- МЕТАДАННЫЕ ЭТОЙ СТРАНИЦЫ (для <title> и <meta>) --- #}
-{% set title = settings.lead_magnet_page.title %}
-{% set description = settings.lead_magnet_page.subheadline %}
-{% set permalink = "/" %} {# Делаем эту страницу главной #}
-
-{# --- УНИКАЛЬНЫЕ СТИЛИ ЭТОЙ СТРАНИЦЫ --- #}
 {% block pageStyles %}
-<link rel="stylesheet" href="/css/lead-magnet.css">
+  <link rel="stylesheet" href="/css/lead-magnet.css">
 {% endblock %}
 
-{# --- УНИКАЛЬНЫЙ КОНТЕНТ ЭТОЙ СТРАНИЦЫ --- #}
 {% block mainContent %}
 <div class="page-container">
     <div class="content-wrapper">
         <h1 class="main-title">
-            {{- settings.lead_magnet_page.headline | safe -}}
+            AI Сделает 90% Работы, чтобы ты Заработал <span class="highlight-word">Первые Деньги</span> Уже на Этой Неделе!
         </h1>
 
         <p class="subtitle">
-            {{- settings.lead_magnet_page.subheadline | safe -}}
+            Хватит сложных схем и пустых обещаний! Получи <strong>БЕСПЛАТНЫЙ "Навигатор по Онлайн-Доходу"</strong> и узнай, как с помощью AI-помощника запустить свой первый онлайн-проект <strong>без опыта, без технических знаний и без риска.</strong>
         </p>
 
-        <ul class="benefits-list-lm"> {# ✅ Имя класса возвращено #}
-            {%- for benefit in settings.lead_magnet_page.benefits -%}
+        <ul class="benefits-list-lm">
             <li>
-                <span class="bullet-icon-lm">{{ benefit.icon }}</span> {# ✅ Имя класса возвращено #}
-                <span class="bullet-text-lm">{{ benefit.text | safe }}</span> {# ✅ Имя класса возвращено #}
+                <span class="bullet-icon-lm">🧭</span>
+                <span class="bullet-text-lm">Получи <strong>пошаговую инструкцию</strong>, понятную даже твоей бабушке.</span>
             </li>
-            {%- endfor -%}
+            <li>
+                <span class="bullet-icon-lm">💡</span>
+                <span class="bullet-text-lm">Узнай, как AI будет <strong>бесплатно писать тексты</strong> и создавать картинки для тебя.</span>
+            </li>
+            <li>
+                <span class="bullet-icon-lm">🚀</span>
+                <span class="bullet-text-lm">Получи <strong>готовую и ЧЕСТНУЮ бизнес-модель</strong>, где все активы и 100% пассивного дохода принадлежат ТЕБЕ.</span>
+            </li>
+            <li>
+                <span class="bullet-icon-lm">🤝</span>
+                <span class="bullet-text-lm">Присоединись к команде, где тебя <strong>поддержат и доведут до результата</strong>.</span>
+            </li>
         </ul>
 
         <a href="{{ settings.integrations.links.lead_magnet_bot }}" class="cta-button cta-button--shaking">
-            {{- settings.lead_magnet_page.cta_button_text -}}
+            🗺️ ПОЛУЧИТЬ НАВИГАТОР (Бесплатно)
         </a>
-        <p class="cta-details-lm"> {# ✅ Имя класса возвращено #}
+        <p class="cta-details-lm">
             (Нажми и получи мгновенный доступ в нашем Telegram-боте!)
         </p>
     </div>
