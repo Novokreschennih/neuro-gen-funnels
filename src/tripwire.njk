@@ -1,8 +1,8 @@
-{% extends "layouts/base.njk" %}
-
-{# --- МЕТАДАННЫЕ СТРАНИЦЫ --- #}
-{% set title = settings.tripwire_page.title %}
-{% set permalink = "/practitioner-offer/index.html" %} {# Устанавливаем красивый URL: your-domain.com/practitioner-offer/ #}
+---
+layout: "layouts/base.njk"
+title: "{{ settings.tripwire_page.title }}"
+permalink: "/practitioner-offer/index.html"
+---
 
 {# --- ПОДКЛЮЧАЕМ УНИКАЛЬНЫЕ СТИЛИ ЭТОЙ СТРАНИЦЫ --- #}
 {% block pageStyles %}
