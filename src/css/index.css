@@ -1,825 +1,102 @@
-/* --- НАСТРОЙКИ ТЕМЫ (ОБЩИЕ ДЛЯ ВСЕГО САЙТА) --- */
+/* src/css/base.css */
+
+/* --- 1. Шрифты и Базовые настройки --- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap');
+
 :root {
-	--primary: #6366f1;
-	--secondary: #8b5cf6;
-	--accent: #ec4899;
-	--neon: #00f7ff;
-	--bg-deep: #020617;
-	--bg-surface: #0f172a;
-	--text-light: #f8fafc;
-	--text-gray: #94a3b8;
-	--card-bg: rgba(15, 23, 42, 0.6);
-	--glass: rgba(10, 14, 27, 0.8);
-	--border: rgba(255, 255, 255, 0.1);
-	--primary-glow: rgba(99, 102, 241, 0.5);
+    /* Цветовая палитра - можно вынести в settings.json в будущем */
+    --primary-color-lm: #8e44ad;
+    --secondary-color-lm: #3498db;
+    --accent-color-lm: #f1c40f;
+    --text-color-lm: #ffffff;
+    --dark-text-color-lm: #2c3e50;
+    --bg-color: rgb(48, 43, 99);
 }
 
-html.light-theme {
-	--primary: #4f46e5;
-	--secondary: #7c3aed;
-	--accent: #db2777;
-	--neon: #0ea5e9;
-	--bg-deep: #f3f4f6;
-	--bg-surface: #ffffff;
-	--text-light: #111827;
-	--text-gray: #6b7280;
-	--card-bg: rgba(255, 255, 255, 0.7);
-	--glass: rgba(240, 240, 240, 0.8);
-	--border: rgba(0, 0, 0, 0.08);
-	--primary-glow: rgba(79, 70, 229, 0.5);
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color-lm);
+    margin: 0;
 }
-
-/* --- СТИЛИ ДЛЯ БЛОГА --- */
 
 * {
-	box-sizing: border-box;
-}
-html {
-	scroll-behavior: smooth;
-}
-body {
-	font-family: "Inter", sans-serif; /* Шрифты УЖЕ подключены в base.njk */
-	background-color: var(--bg-deep);
-	color: var(--text-light);
-	margin: 0;
-	padding: 0;
-	min-height: 100vh;
-	overflow-x: hidden;
-	position: relative;
-	max-width: none;
+    box-sizing: border-box;
 }
 
-body::before {
-	content: "";
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: radial-gradient(
-		800px circle at 50% 50%,
-		/* Центрируем свечение для блога */ var(--primary-glow),
-		transparent 40%
-	);
-	pointer-events: none;
-	z-index: -1;
-	display: none;
+/* --- 2. Общие контейнеры и анимации --- */
+.page-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.container {
-	padding: 40px;
-	max-width: 1200px;
-	margin: 0 auto;
+.content-wrapper {
+    width: 100%;
+    max-width: 800px; /* ✅ Увеличили ширину контента */
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeInZoom 1s ease-out forwards;
 }
 
-header,
-main,
-footer {
-	max-width: 900px;
-	margin: 0 auto;
-	padding: 0;
-}
-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-bottom: 20px;
-	margin-bottom: 60px;
-	border-bottom: 1px solid var(--border);
-}
-.home-link {
-	font-size: 1.8rem;
-	font-weight: 800;
-	color: var(--text-light);
-	text-decoration: none;
-	transition: color 0.3s;
-}
-.home-link:hover {
-	color: var(--primary);
-}
-nav {
-	list-style: none;
-	padding: 0;
-}
-.nav {
-	display: flex;
-	gap: 2em;
-	list-style: none;
-	padding: 0;
-}
-.nav a {
-	position: relative;
-	color: var(--text-gray);
-	font-weight: 600;
-	text-decoration: none;
-	transition: color 0.3s;
-	padding-bottom: 5px;
-}
-.nav a:hover {
-	color: var(--text-light);
-}
-.nav a[aria-current="page"] {
-	color: var(--primary);
-}
-.nav a[aria-current="page"]::after {
-	content: "";
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background: var(--primary);
-	transform: scaleX(1);
-	transition: transform 0.3s ease;
-}
-.nav a::after {
-	content: "";
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background: var(--primary);
-	transform: scaleX(0);
-	transform-origin: center;
-	transition: transform 0.3s ease;
-}
-.nav a:hover::after {
-	transform: scaleX(1);
-}
-.back-to-site {
-	background: var(--card-bg);
-	padding: 10px 20px;
-	border-radius: 50px;
-	color: var(--neon);
-	font-weight: 600;
-	text-decoration: none;
-	border: 1px solid var(--border);
-	transition: all 0.3s;
-}
-.back-to-site:hover {
-	background: var(--primary);
-	border-color: var(--primary);
-	color: white;
-	transform: translateY(-2px);
+@keyframes fadeInZoom { 
+    from { opacity: 0; transform: scale(0.95); } 
+    to { opacity: 1; transform: scale(1); } 
 }
 
-@media (max-width: 768px) {
-	header {
-		flex-direction: column;
-		gap: 20px;
-	}
-	.nav {
-		gap: 1.5em;
-	}
-}
-.featured-post {
-	background: linear-gradient(
-		45deg,
-		rgba(99, 102, 241, 0.2),
-		rgba(236, 72, 153, 0.2)
-	);
-	padding: 40px;
-	border-radius: 20px;
-	margin-bottom: 60px;
-	border: 1px solid var(--primary);
-}
-.featured-post-content h2 {
-	font-size: 2.5rem;
-	margin-bottom: 15px;
-}
-.featured-post-content h2 a {
-	color: var(--text-light);
-	text-decoration: none;
-	transition: color 0.3s;
-}
-.featured-post-content h2 a:hover {
-	color: var(--neon);
-}
-.featured-post-content p {
-	font-size: 1.2rem;
-	color: var(--text-gray);
-	margin-bottom: 0;
-}
-.featured-tag {
-	display: inline-block;
-	background: var(--accent);
-	color: white;
-	padding: 5px 12px;
-	border-radius: 20px;
-	font-size: 0.8rem;
-	font-weight: 700;
-	margin-bottom: 20px;
-}
-.section-title {
-	font-size: 2.5rem;
-	text-align: center;
-	margin-bottom: 40px;
+/* --- 3. Общие стили для типографики --- */
+.main-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3em; /* Немного увеличили для акцента */
+    font-weight: 900;
+    margin: 0 auto 15px;
+    line-height: 1.2;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
 }
 
-.postlist {
-	list-style: none;
-	padding: 0;
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-	gap: 30px;
-}
-.postlist-item:before {
-	content: none;
-}
-.postlist-link {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	padding: 30px;
-	background: var(--card-bg);
-	border-radius: 15px;
-	border: 1px solid var(--border);
-	transition: all 0.3s ease;
-	text-decoration: none;
-}
-.postlist-link:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-	border-color: var(--primary);
-}
-.postlist-link h2 {
-	font-size: 1.6rem;
-	margin-bottom: 15px;
-	color: var(--primary);
-	font-weight: 700;
-}
-.postlist-excerpt {
-	color: var(--text-light);
-	line-height: 1.7;
-	flex-grow: 1;
-	font-size: 1rem;
+.main-title .highlight-word {
+    color: var(--accent-color-lm);
 }
 
-article h1 {
-	font-size: 3rem;
-	color: var(--text-light);
-	line-height: 1.2;
-	margin-bottom: 40px;
-}
-article h2,
-article h3 {
-	line-height: 1.3;
-	margin: 40px 0 20px;
-	color: var(--primary);
-}
-article h2 {
-	font-size: 2.2rem;
-}
-article p {
-	margin-bottom: 20px;
-	color: var(--text-gray);
-	line-height: 1.8;
-	font-size: 1.1rem;
-}
-article ul,
-article ol {
-	padding-left: 1.5em;
-	margin-bottom: 20px;
-	color: var(--text-gray);
-}
-article li {
-	line-height: 1.8;
-	margin-bottom: 0.75em;
-	padding-left: 0.5em;
+.subtitle {
+    font-size: 1.4em;
+    margin: 0 auto 30px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    max-width: 700px;
 }
 
-article a {
-	color: var(--neon);
-	text-decoration: none;
-	border-bottom: 1px solid transparent;
-	transition: all 0.3s;
-}
-article a:hover {
-	border-bottom-color: var(--neon);
-}
-article pre {
-	background: rgba(0, 0, 0, 0.3);
-	padding: 20px;
-	border-radius: 8px;
-	overflow-x: auto;
-	margin-bottom: 20px;
-	border: 1px solid var(--border);
-}
-article code {
-	font-family: "Courier New", Courier, monospace;
-	color: var(--accent);
-}
-article blockquote {
-	border-left: 3px solid var(--primary);
-	padding-left: 20px;
-	margin: 30px 0;
-	font-style: italic;
-	color: var(--text-light);
+.subtitle strong {
+    color: var(--accent-color-lm);
+    font-weight: 700;
 }
 
-.links-nextprev {
-	display: flex;
-	justify-content: space-between;
-	gap: 2em;
-	margin-top: 60px;
-	padding-top: 30px;
-	border-top: 1px solid var(--border);
-	list-style: none;
-}
-.links-nextprev a {
-	color: var(--text-gray);
-	text-decoration: none;
-	display: block;
-	transition: all 0.3s;
-}
-.links-nextprev a:hover {
-	color: var(--text-light);
-	transform: translateY(-3px);
-}
-.links-nextprev span,
-.links-nextprev br {
-	display: none;
-}
-.links-nextprev strong {
-	color: var(--primary);
-	font-size: 1.1rem;
-}
-.links-nextprev-next {
-	text-align: right;
-}
-.links-nextprev-prev::before {
-	content: "← Предыдущая";
-	display: block;
-	font-size: 0.9rem;
-	color: var(--text-gray);
-	margin-bottom: 5px;
-}
-.links-nextprev-next::before {
-	content: "Следующая →";
-	display: block;
-	font-size: 0.9rem;
-	color: var(--text-gray);
-	margin-bottom: 5px;
-}
-
-footer {
-	text-align: center;
-	margin-top: 60px;
-	padding-top: 20px;
-	border-top: 1px solid var(--border);
-	color: var(--text-gray);
-}
-.visually-hidden {
-	display: none;
-}
-
-.post-metadata {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 1em;
-	margin-bottom: 40px;
-	padding-bottom: 20px;
-	border-bottom: 1px solid var(--border);
-}
-.tags-list {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5em;
-}
-.post-tag {
-	background: var(--card-bg);
-	color: var(--primary);
-	padding: 5px 12px;
-	border-radius: 20px;
-	font-size: 0.8rem;
-	font-weight: 600;
-	text-decoration: none;
-	transition: all 0.2s;
-}
-.post-tag:hover {
-	background: var(--primary);
-	color: white;
-}
-
-.tag-cloud {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1em;
-	justify-content: center;
-	padding: 2em 0;
-}
-.tag-cloud-item {
-	display: block;
-	background: var(--card-bg);
-	color: var(--text-gray);
-	padding: 10px 20px;
-	border-radius: 8px;
-	font-size: 1.2rem;
-	font-weight: 600;
-	text-decoration: none;
-	transition: all 0.3s;
-}
-.tag-cloud-item:hover {
-	background: var(--primary);
-	color: white;
-	transform: translateY(-3px);
-}
-.cta-block {
-	text-align: center;
-	margin-top: 60px;
-	padding: 40px;
-	background: linear-gradient(
-		45deg,
-		rgba(99, 102, 241, 0.1),
-		rgba(236, 72, 153, 0.1)
-	);
-	border-radius: 20px;
-	border: 1px solid var(--border);
-}
-.cta-block h2 {
-	font-size: 2rem;
-	color: var(--text-light);
-	margin: 0 0 15px 0;
-}
-.cta-block p {
-	color: var(--text-gray);
-	max-width: 600px;
-	margin: 0 auto 25px;
-	line-height: 1.7;
-}
+/* --- 4. Общие стили для кнопок --- */
 .cta-button {
-	display: inline-block;
-	background: linear-gradient(45deg, var(--primary), var(--secondary));
-	color: white;
-	padding: 15px 40px;
-	font-size: 1.1rem;
-	font-weight: 600;
-	text-decoration: none;
-	border-radius: 50px;
-	transition: all 0.3s;
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    background-image: linear-gradient(45deg, var(--accent-color-lm) 0%, #f7b733 50%, #fc4a1a 100%);
+    color: var(--dark-text-color-lm);
+    padding: 20px 45px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 50px;
+    margin: 30px auto 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 15px 30px rgba(241, 183, 51, 0.4);
+    border: none;
+    cursor: pointer;
 }
+
 .cta-button:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
-}
-footer {
-	text-align: center;
-	margin-top: 80px;
-	padding-top: 40px;
-	border-top: 1px solid var(--border);
-}
-
-.footer-cta {
-	margin-bottom: 40px;
-}
-
-.footer-cta h2 {
-	font-size: 2rem;
-	color: var(--text-light);
-	font-weight: 700;
-	margin-bottom: 25px;
-}
-
-.footer-meta {
-	font-size: 0.9rem;
-	color: var(--text-gray);
-	opacity: 0.8;
-}
-
-.footer-meta a {
-	color: var(--text-gray);
-	text-decoration: none;
-	transition: color 0.3s;
-}
-
-.footer-meta a:hover {
-	color: var(--primary);
-}
-
-.footer-meta p {
-	margin-top: 15px;
-}
-
-main picture {
-	max-width: 100%;
-	display: block;
-	margin: 30px auto;
-}
-
-main picture img {
-	width: 100%;
-	height: auto;
-	display: block;
-	border-radius: 15px;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-	border: 1px solid var(--border);
-}
-
-.page-title {
-	font-size: 2.5rem;
-	text-align: center;
-	margin-bottom: 60px;
-	font-weight: 800;
-}
-
-.pagination {
-	margin-top: 60px;
-	padding-top: 30px;
-	border-top: 1px solid var(--border);
-}
-.pagination-list {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	list-style: none;
-	padding: 0;
-	gap: 10px;
-}
-.pagination-link {
-	display: block;
-	min-width: 44px;
-	height: 44px;
-	padding: 0 10px;
-	line-height: 44px;
-	text-align: center;
-	background: var(--card-bg);
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	color: var(--text-gray);
-	font-weight: 600;
-	text-decoration: none;
-	transition: all 0.3s;
-}
-.pagination-link:hover {
-	background: var(--primary);
-	border-color: var(--primary);
-	color: white;
-}
-.pagination-link-active {
-	background: var(--primary);
-	border-color: var(--primary);
-	color: white;
-	cursor: default;
-}
-.pagination-link-disabled {
-	display: block;
-	padding: 0 15px;
-	height: 44px;
-	line-height: 44px;
-	color: rgba(255, 255, 255, 0.2);
-	cursor: not-allowed;
-}
-.pagination-link-prev,
-.pagination-link-next {
-	padding: 0 15px;
-}
-
-.view-all-wrapper {
-	text-align: center;
-	margin-top: 60px;
-}
-/* --- СТИЛИ ДЛЯ БЛОКА "ПОСЛЕДНИЕ НОВОСТИ" НА ГЛАВНОЙ --- */
-.latest-news {
-	margin-bottom: 60px;
-	padding: 30px;
-	background: var(--card-bg);
-	border-radius: 20px;
-	border: 1px solid var(--border);
-}
-.section-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: baseline;
-	margin-bottom: 20px;
-	padding-bottom: 15px;
-	border-bottom: 1px solid var(--border);
-}
-.section-title-small {
-	font-size: 1.8rem;
-	margin: 0;
-	color: var(--text-light);
-}
-.view-all-link {
-	color: var(--text-gray);
-	text-decoration: none;
-	font-weight: 500;
-	transition: color 0.3s;
-}
-.view-all-link:hover {
-	color: var(--neon);
-}
-
-.news-snapshot-list {
-	list-style: none;
-	padding: 0;
-}
-.news-snapshot-item {
-	display: flex;
-	align-items: baseline;
-	gap: 20px;
-	padding: 15px 0;
-}
-.news-snapshot-item:not(:last-child) {
-	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-.news-snapshot-item time {
-	flex-shrink: 0;
-	width: 140px;
-	color: var(--text-gray);
-	font-size: 0.9rem;
-}
-.news-snapshot-item h3 {
-	margin: 0;
-	font-size: 1.1rem;
-	font-weight: 500;
-}
-.news-snapshot-item h3 a {
-	color: var(--text-light);
-	text-decoration: none;
-	transition: color 0.3s;
-}
-.news-snapshot-item h3 a:hover {
-	color: var(--primary);
-}
-
-@media (max-width: 600px) {
-	.news-snapshot-item {
-		flex-direction: column;
-		gap: 5px;
-		align-items: flex-start;
-	}
-	.news-snapshot-item time {
-		width: auto;
-		font-size: 0.8rem;
-	}
-}
-/* --- СТИЛИ ДЛЯ ТЕГОВ НА КАРТОЧКАХ ПОСТОВ --- */
-
-/* Используем Flexbox, чтобы "прижать" теги к низу карточки */
-.postlist-link {
-	display: flex;
-	flex-direction: column;
-}
-.post-card-content {
-	flex-grow: 1; /* Этот блок будет занимать все доступное пространство */
-}
-
-.post-card-tags {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 20px; /* Отступ от текста до тегов */
-	padding-top: 15px;
-	border-top: 1px solid var(--border);
-}
-
-.post-tag-on-card {
-	background: rgba(0, 247, 255, 0.1);
-	color: var(--neon);
-	padding: 4px 10px;
-	border-radius: 20px;
-	font-size: 0.75rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-}
-/* --- ФИНАЛЬНЫЕ СТИЛИ ДЛЯ LIGHTBOX --- */
-
-/* Контейнер-ссылка вокруг картинки в статье */
-a.lightbox-trigger {
-	display: block;
-	cursor: zoom-in;
-	transition: transform 0.3s ease;
-}
-a.lightbox-trigger:hover {
-	transform: scale(1.02);
-}
-
-/* Фон модального окна */
-#lightbox {
-	position: fixed;
-	z-index: 1000;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(10, 14, 27, 0.9);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: zoom-out;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-#lightbox.active {
-	opacity: 1;
-	visibility: visible;
-}
-
-/* Само увеличенное изображение */
-#lightbox img {
-	max-width: 90%;
-	max-height: 90%;
-	object-fit: contain;
-	border-radius: 15px;
-	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-	border: 2px solid var(--border);
-	cursor: default;
-	transform: scale(0.9);
-	transition: transform 0.3s ease;
-}
-#lightbox.active img {
-	transform: scale(1);
-}
-
-/* Кнопка закрытия (крестик) */
-#lightbox-close {
-	position: absolute;
-	top: 20px;
-	right: 30px;
-	color: var(--text-light);
-	font-size: 50px;
-	font-weight: 300;
-	line-height: 1;
-	transition: all 0.3s ease;
-	cursor: pointer;
-	text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-#lightbox-close:hover {
-	color: var(--accent);
-	transform: rotate(90deg);
-}
-/* ===================================================================
-   Адаптивность для мобильных устройств
-=================================================================== */
-
-@media (max-width: 768px) {
-	/* --- УМЕНЬШАЕМ ЗАГОЛОВКИ ВНУТРИ СТАТЕЙ И НОВОСТЕЙ --- */
-	article h1 {
-		font-size: 2rem; /* было 3rem */
-		line-height: 1.25;
-	}
-
-	article h2 {
-		font-size: 1.6rem; /* было 2.2rem */
-	}
-
-	article h3 {
-		font-size: 1.3rem; /* было ~1.5rem */
-	}
-
-	article p,
-	article li {
-		font-size: 1rem; /* было 1.1rem */
-	}
-
-	/* --- УМЕНЬШАЕМ ЗАГОЛОВКИ НА КАРТОЧКАХ ПОСТОВ --- */
-	.postlist-link h2 {
-		font-size: 1.4rem; /* было 1.6rem */
-	}
-
-	.featured-post-content h2 {
-		font-size: 1.8rem; /* было 2.5rem */
-	}
-
-	.featured-post-content p {
-		font-size: 1.1rem;
-	}
-
-	.section-title,
-	.page-title {
-		font-size: 2rem; /* было 2.5rem */
-	}
-
-	/* --- АДАПТИВНОСТЬ ШАПКИ И ДРУГИХ ЭЛЕМЕНТОВ (УЖЕ БЫЛО, НО ДЛЯ КОНТЕКСТА) --- */
-	header {
-		flex-direction: column;
-		gap: 20px;
-	}
-	.nav {
-		gap: 1.5em;
-	}
-	.main-nav {
-		gap: 15px;
-	}
-	.nav-link {
-		font-size: 0.9rem;
-		padding: 8px 10px;
-	}
-}
-
-@media (max-width: 480px) {
-	/* Дополнительные правки для самых маленьких экранов */
-	article h1 {
-		font-size: 1.8rem;
-	}
-	.container {
-		padding: 20px;
-	}
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(241, 183, 51, 0.6);
 }
