@@ -17,6 +17,11 @@
 {# --- УНИКАЛЬНЫЙ КОНТЕНТ --- #}
 {% block mainContent %}
 <div class="page-container">
+  {# --- ДИАГНОСТИЧЕСКИЙ БЛОК --- #}
+    <pre style="background: #fff; color: #000; text-align: left; padding: 20px; white-space: pre-wrap; z-index: 9999; position: relative;">
+        <code>{{ settings.smart_payment_block | dump | safe }}</code>
+    </pre>
+    {# --- КОНЕЦ ДИАГНОСТИЧЕСКОГО БЛОКА --- #}
     <div class="content-wrapper">
         <h1 class="main-title">{{ settings.tripwire_page.headline }}</h1>
         <p class="subtitle">{{ settings.tripwire_page.subheadline }}</p>
