@@ -41,15 +41,38 @@
 .cta-details-lm { animation-delay: 0.65s; }
 
 /* Анимация "дыхания" для кнопки */
-.cta-button {
-    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s forwards, 
-               pulse-glow 2.5s infinite 1.5s;
+/* --- АНИМАЦИИ ПОЯВЛЕНИЯ ЭЛЕМЕНТОВ --- */
+.main-title, .subtitle, .benefits-list-lm, .cta-button, .cta-details-lm {
+    opacity: 0;
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
-@keyframes pulse-glow {
-    0% { box-shadow: 0 10px 25px rgba(241, 183, 51, 0.3); }
-    50% { box-shadow: 0 15px 40px rgba(241, 183, 51, 0.5); }
-    100% { box-shadow: 0 10px 25px rgba(241, 183, 51, 0.3); }
+/* Каскадная задержка для красивого эффекта */
+.subtitle { animation-delay: 0.15s; }
+.benefits-list-lm { animation-delay: 0.3s; }
+.cta-button { animation-delay: 0.5s; }
+.cta-details-lm { animation-delay: 0.65s; }
+
+/* ✅ ИЗМЕНЕНИЕ: Новая анимация для кнопки */
+.cta-button {
+    /* Сначала анимация появления, потом, через 2.5 секунды, запускаем "подергивание" */
+    animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s forwards, 
+               subtle-shake 3s infinite 2.5s; /* ⬅️ 3s - длительность всего цикла */
+}
+
+/* ✅ НОВЫЕ KEYFRAMES: Анимация "подергивания" */
+@keyframes subtle-shake {
+  /* Анимация происходит только в первые 10% времени,
+     остальные 90% времени (примерно 2.7 секунды) кнопка стоит на месте. */
+  0%, 10%, 100% { 
+    transform: translateX(0); 
+  }
+  2%, 6% { 
+    transform: translateX(-5px) rotate(-1deg); 
+  }
+  4%, 8% { 
+    transform: translateX(5px) rotate(1deg); 
+  }
 }
 
 /* --- АДАПТИВНОСТЬ --- */
