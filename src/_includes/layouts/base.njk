@@ -6,14 +6,16 @@
 		<title>{{ title or settings.site.name }}</title>
 		<meta name="description" content="{{ description or settings.site.description }}">
 		<link rel="icon" href="/favicon.ico">
+		
 		<link rel="stylesheet" href="/css/index.css">
 		
-		{# Блок для уникальных стилей каждой страницы #}
+		{# Эта "дырка" нужна для подключения уникальных CSS-файлов страниц #}
 		{% block pageStyles %}{% endblock %}
 	</head>
 	<body>
 
-		{% block mainContent %}{% endblock %}
+		{# ✅ ГЛАВНОЕ ИЗМЕНЕНИЕ: Возвращаем переменную 'content' #}
+		{{ content | safe }}
 		
 		{# Подключаем скрипт Яндекс.Метрики #}
 		<script src="/js/y-metrika.js" defer></script>
