@@ -25,7 +25,7 @@
 		})();
 })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-var metrikaId = 104313731;
+var metrikaId = ;
 
 var initMetrika = function () {
 	ym(metrikaId, "init", {
