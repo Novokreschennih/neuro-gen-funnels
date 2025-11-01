@@ -1,5 +1,5 @@
-/* --- Уникальные стили для главной страницы --- */
-.benefits-list {
+/* --- Уникальные стили для главной страницы (ИСПРАВЛЕННАЯ ВЕРСЯ) --- */
+.benefits-list-lm {
     list-style: none;
     padding: 35px;
     margin: 50px auto;
@@ -13,37 +13,37 @@
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-.benefits-list li {
+.benefits-list-lm li {
     font-size: 1.15rem; margin-bottom: 20px;
     display: flex; align-items: center;
     color: rgba(255, 255, 255, 0.9); line-height: 1.6;
 }
-.benefits-list li:last-child { margin-bottom: 0; }
-.benefits-list li .icon { font-size: 1.5em; margin-right: 20px; color: var(--accent-color); }
-.benefits-list li .text strong { font-weight: 700; color: var(--text-color); }
+.benefits-list-lm li:last-child { margin-bottom: 0; }
+.benefits-list-lm li .bullet-icon-lm { font-size: 1.5em; margin-right: 20px; color: var(--accent-color); }
+.benefits-list-lm li .bullet-text-lm strong { font-weight: 700; color: var(--text-color); }
 
-.cta-details {
+.cta-details-lm {
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.7);
     margin-top: 20px;
 }
 
 /* --- АНИМАЦИИ ПОЯВЛЕНИЯ ЭЛЕМЕНТОВ --- */
-.main-title, .subtitle, .benefits-list, .cta-button, .cta-details {
+.main-title, .subtitle, .benefits-list-lm, .cta-button, .cta-details-lm {
     opacity: 0;
     animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
 /* Каскадная задержка для красивого эффекта */
 .subtitle { animation-delay: 0.15s; }
-.benefits-list { animation-delay: 0.3s; }
+.benefits-list-lm { animation-delay: 0.3s; }
 .cta-button { animation-delay: 0.5s; }
-.cta-details { animation-delay: 0.65s; }
+.cta-details-lm { animation-delay: 0.65s; }
 
 /* Анимация "дыхания" для кнопки */
 .cta-button {
     animation: fade-in-up 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s forwards, 
-               pulse-glow 2.5s infinite 1.5s; /* Запускаем пульсацию через 1.5с */
+               pulse-glow 2.5s infinite 1.5s;
 }
 
 @keyframes pulse-glow {
