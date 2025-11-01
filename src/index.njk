@@ -8,41 +8,64 @@
 {# --- УНИКАЛЬНЫЕ СТИЛИ ЭТОЙ СТРАНИЦЫ --- #}
 {% block pageStyles %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap');
-    
-    .landing-neuro-magic-container-craftum * { 
-        box-sizing: border-box; 
-    }
-    /* ... и все остальные стили из вашего файла, скопированные сюда ... */
-    .landing-neuro-magic-container-craftum .content-wrapper-lm { background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 35px; border-radius: 20px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3); text-align: center; max-width: 700px; width: 90%; animation: landing-neuro-magic-container-craftum-lnm-fadeInZoom 1s ease-out forwards; position: relative; z-index: 1; border: 1px solid rgba(255, 255, 255, 0.1); }
-    @keyframes landing-neuro-magic-container-craftum-lnm-fadeInZoom { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    .landing-neuro-magic-container-craftum .main-title-lm { font-family: 'Montserrat', sans-serif; font-size: 2.6em; font-weight: 900; margin-bottom: 15px; line-height: 1.15; color: #ffffff; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); position: relative; }
-    .landing-neuro-magic-container-craftum .main-title-lm::after { content: ''; display: block; width: 100px; height: 4px; background: linear-gradient(90deg, transparent, #f1c40f, transparent); margin: 15px auto; border-radius: 2px; }
-    .landing-neuro-magic-container-craftum .main-title-lm .highlight-word { color: #f1c40f; display: inline-block; position: relative; }
-    .landing-neuro-magic-container-craftum .main-title-lm .highlight-word::after { content: ''; position: absolute; bottom: 5px; left: 0; width: 100%; height: 10px; background: rgba(241, 196, 15, 0.3); z-index: -1; border-radius: 3px; }
-    .landing-neuro-magic-container-craftum .subtitle-lm { font-family: 'Roboto', sans-serif; font-size: 1.3em; margin-bottom: 25px; color: rgba(255, 255, 255, 0.95); line-height: 1.6; max-width: 650px; margin-left: auto; margin-right: auto; }
-    .landing-neuro-magic-container-craftum .subtitle-lm strong { color: #f1c40f; font-weight: 700; position: relative; }
-    .landing-neuro-magic-container-craftum .subtitle-lm strong::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: #f1c40f; }
-    .landing-neuro-magic-container-craftum .benefits-list-lm { list-style: none; padding: 0; margin: 40px auto; max-width: 550px; text-align: left; }
-    .landing-neuro-magic-container-craftum .benefits-list-lm li { font-size: 1.15rem; margin-bottom: 20px; display: flex; color: rgba(255, 255, 255, 0.95); line-height: 1.6; padding: 15px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); }
-    .landing-neuro-magic-container-craftum .benefits-list-lm li:hover { background: rgba(241, 196, 15, 0.1); transform: translateX(5px); border-color: rgba(241, 196, 15, 0.3); }
-    .landing-neuro-magic-container-craftum .benefits-list-lm li .bullet-icon-lm { font-size: 1.4em; margin-right: 15px; color: #f1c40f; flex-shrink: 0; line-height: 1.5; align-self: flex-start; }
-    .landing-neuro-magic-container-craftum .benefits-list-lm li .bullet-text-lm { flex-grow: 1; text-align: left; }
-    .landing-neuro-magic-container-craftum .benefits-list-lm li .bullet-text-lm strong { font-weight: 700; color: #ffffff; position: relative; }
-    .landing-neuro-magic-container-craftum .benefits-list-lm li .bullet-text-lm strong::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #f1c40f; transition: width 0.3s ease; }
-    .landing-neuro-magic-container-craftum .benefits-list-lm li:hover .bullet-text-lm strong::after { width: 100%; }
-    .landing-neuro-magic-container-craftum .cta-button-lm { display: inline-block; background-image: linear-gradient(45deg, #f1c40f 0%, #f7b733 50%, #fc4a1a 100%); color: #2c3e50; padding: 20px 45px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-size: 1.3rem; font-weight: 700; border-radius: 50px; margin: 30px auto 20px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 15px 30px rgba(241, 183, 51, 0.4), 0 0 0 4px rgba(255, 255, 255, 0.1); border: none; cursor: pointer; position: relative; overflow: hidden; z-index: 1; }
-    .landing-neuro-magic-container-craftum .cta-button-lm::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent); transition: 0.5s; z-index: -1; }
-    .landing-neuro-magic-container-craftum .cta-button-lm:hover::before { left: 100%; }
-    .landing-neuro-magic-container-craftum .cta-button-lm:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 40px rgba(241, 183, 51, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.2); }
-    .landing-neuro-magic-container-craftum .cta-button-lm:active { transform: translateY(0) scale(0.98); }
-    .landing-neuro-magic-container-craftum .cta-details-lm { font-size: 1rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 0; font-weight: 500; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
-    .pulse-animation { animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.6); } 70% { box-shadow: 0 0 0 15px rgba(241, 196, 15, 0); } 100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); } }
-    .floating { animation: floating 3s ease-in-out infinite; }
-    @keyframes floating { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
-    @media (max-width: 700px) { .landing-neuro-magic-container-craftum .content-wrapper-lm { padding: 25px; } .landing-neuro-magic-container-craftum .main-title-lm { font-size: 2.2em; } .landing-neuro-magic-container-craftum .subtitle-lm { font-size: 1.15em; } .landing-neuro-magic-container-craftum .benefits-list-lm li { font-size: 1.05rem; padding: 12px; } .landing-neuro-magic-container-craftum .cta-button-lm { font-size: 1.1rem; padding: 16px 35px; } }
-    @media (max-width: 480px) { .landing-neuro-magic-container-craftum .benefits-list-lm { margin: 30px auto; } .landing-neuro-magic-container-craftum .benefits-list-lm li { flex-direction: column; align-items: flex-start; } .landing-neuro-magic-container-craftum .bullet-icon-lm { margin-bottom: 10px; } }
+   /* src/index.njk -> внутри блока {% block pageStyles %} */
+
+/* Специфичные переменные, если они отличаются */
+:root {
+    --primary-color-lm: #8e44ad; 
+    --secondary-color-lm: #3498db;
+}
+
+/* Уникальный стиль для списка преимуществ на главной */
+.benefits-list-lm {
+    list-style: none;
+    padding: 30px;
+    margin: 40px auto;
+    max-width: 600px;
+    text-align: left;
+
+    /* ✅ Эффект "матового стекла" перенесен сюда */
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.benefits-list-lm li {
+    font-size: 1.15rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+}
+
+.benefits-list-lm li .bullet-icon-lm {
+    font-size: 1.4em;
+    margin-right: 15px;
+    color: var(--accent-color-lm);
+    line-height: 1.5;
+}
+
+.benefits-list-lm li .bullet-text-lm strong {
+    font-weight: 700;
+    color: var(--text-color-lm);
+}
+
+.cta-details-lm {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 20px;
+}
+
+/* Адаптивность */
+@media (max-width: 700px) {
+    .main-title { font-size: 2.2em; }
+    .subtitle { font-size: 1.15em; }
+    .benefits-list-lm li { font-size: 1.05rem; }
+    .cta-button { font-size: 1.1rem; padding: 16px 35px; }
+}
 </style>
 {% endblock %}
 
